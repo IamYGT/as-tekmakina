@@ -1,0 +1,34 @@
+ 	RewriteEngine On
+#		RewriteBase /
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME}.php -f
+#	RewriteRule ^(.*)$ $1.php
+	RewriteRule ^([a-zA-Z0-9_-]+)\/?$ $1.php [NC]
+
+
+	RewriteRule ^index$ index.php [L,QSA]
+	RewriteRule haber/([a-zA-Z0-9_-]+)$ haber-detay.php?url=$1 [L,QSA]
+ 	RewriteRule service-detail/([a-zA-Z0-9_-]+)$ s-d.php?url=$1 [L,QSA]
+ 	RewriteRule hizmet/([a-zA-Z0-9_-]+)$ hizmet-detay.php?url=$1 [L,QSA]
+ 	RewriteRule projeler/([a-zA-Z0-9_-]+)$ projeler.php?url=$1 [L,QSA]
+ 	RewriteRule proje/([a-zA-Z0-9_-]+)$ proje-detay.php?url=$1 [L,QSA]
+ 	RewriteRule kurumsal/([a-zA-Z0-9_-]+)$ kurumsal-detay.php?url=$1 [L,QSA]
+	RewriteRule nieuws-detail/([a-zA-Z0-9_-]+)$ nd.php?url=$1 [L,QSA]
+
+
+	RewriteRule ^hardware/([a-zA-Z0-9_-]+)$ /hardware-akrapovic.php?url=$1 [L,QSA]
+ 	RewriteRule ^hardware/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-([a-zA-Z0-9_-]+)$ /hardware-marka.php?url=$1&url2=$2&url3=$3 [L,QSA]
+ 	RewriteRule ^hardware/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-([0-9]+)/([a-zA-Z0-9_-]+)-([0-9]+)$ /hardware-model.php?url=$1&url2=$2&url3=$3&url4=$4&url5=$5 [L,QSA]
+ 	RewriteRule ^hardware/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-([0-9]+)/([a-zA-Z0-9_-]+)-([0-9]+)/([a-zA-Z0-9_-]+)$ /hardware-detail.php?url=$1&url2=$2&url3=$3&url4=$4&url5=$5&url6=$6 [L,QSA]
+
+
+	RewriteRule	^car/(.*)$ araclar.php
+ 	RewriteRule	^chip-tunings/(.*)$ car-detail.php
+
+
+	RewriteRule ^sitemapAraclar\.xml$ sitemapAraclar.php [L]
+	RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+
+	RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-p-([a-zA-Z0-9_-]+)$ /pages.php?q1=$1&q2=$2&q3=$3 [L,QSA]
+	RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-c-([a-zA-Z0-9_-]+)$ projeler.php?catname=$1&catname2=$2&catname3=$3 [L,QSA]
