@@ -23,9 +23,9 @@
 
 	define('ADMIN_DIRECTORY', 'admin');
 
-	$dbname="astek_db";
-	$dbuser="astek_db";
-	$dbpass="Iyc$7s840";
+	$dbname="pumada_db";
+	$dbuser="pumada_db";
+	$dbpass="Sc11s&2a5";
 	$host="localhost";
 
 	try {

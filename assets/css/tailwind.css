@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Özel stiller */
+.language-switcher {
+    @apply relative inline-block text-left z-50;
+}
+
+.language-button {
+    @apply inline-flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-white bg-transparent hover:bg-gray-700/50 focus:outline-none rounded-md;
+}
+
+.language-dropdown {
+    @apply absolute right-0 w-40 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none;
+}
+
+.language-option {
+    @apply flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
+} 

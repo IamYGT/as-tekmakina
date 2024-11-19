@@ -1,8 +1,8 @@
-<?php 
-	include_once("class.upload.php");
-	include_once("Mobile_Detect.php");  
-	$detect = new Mobile_Detect;
-	
+<?php
+require_once(__DIR__ . '/error_handler.php');
+include_once("class.upload.php");
+include_once("Mobile_Detect.php");
+
 	@session_start();
 	@ob_start();  
 
@@ -354,11 +354,13 @@
 			$data = strip_tags($data);  
 		return $data;
 	}
-	function LANG($str,$lang) {
+	function LANG($str, $lang) {
 		global $db;
-		$q = $db->query("SELECT deger FROM dil_kelimeler where adi='$str' AND kod = '$lang'")->fetch(PDO::FETCH_ASSOC);
-		return $q["deger"];
-	}  
+		$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE adi = ? AND kod = ?");
+		$query->execute([$str, $lang]);
+		$result = $query->fetch(PDO::FETCH_ASSOC);
+		return $result ? $result["deger"] : $str;
+	}
 
 	$cookie_adi = "LANG_COOKIE"; 
 	$varsayilan_dil_q = $db->query("select * from dil where dil_varsayilan = '1'")->fetch(PDO::FETCH_ASSOC);
@@ -408,5 +410,71 @@
 		'12' => 'Aralık'
 	);
 	
+	// Dil ile ilgili fonksiyonlar
+	function getDilListesi() {
+		global $db;
+		try {
+			$query = $db->query("SELECT * FROM diller WHERE dil_durum = 1 ORDER BY dil_sira ASC");
+			return $query->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+			return [];
+		}
+	}
+
+	function getVarsayilanDil() {
+		global $db;
+		try {
+			$query = $db->prepare("SELECT * FROM dil WHERE dil_varsayilan = 1 AND dil_durum = 1 LIMIT 1");
+			$query->execute();
+			$varsayilan = $query->fetch(PDO::FETCH_ASSOC);
+			return $varsayilan ?: ['dil_kod' => 'tr'];
+		} catch(PDOException $e) {
+			error_log("Dil sorgusu hatası: " . $e->getMessage());
+			return ['dil_kod' => 'tr'];
+		}
+	}
+
+	function getCurrentDil() {
+		global $cookie_adi;
+		if (isset($_COOKIE[$cookie_adi])) {
+			return $_COOKIE[$cookie_adi];
+		}
+		$varsayilan = getVarsayilanDil();
+		return $varsayilan['dil_kod'];
+	}
+
+	function getDilById($dil_kod) {
+		global $db;
+		$query = $db->prepare("SELECT * FROM dil WHERE dil_kod = ? AND dil_durum = 1");
+		$query->execute([$dil_kod]);
+		return $query->fetch(PDO::FETCH_ASSOC);
+	}
 	
 	
+	function getBayrakKodu($dil_kod) {
+		$bayrak_kodlari = [
+			'tr' => 'tr',
+			'en' => 'gb',
+			'de' => 'de',
+			'fr' => 'fr',
+			// diğer diller için bayrak kodları
+		];
+		
+		return isset($bayrak_kodlari[$dil_kod]) ? $bayrak_kodlari[$dil_kod] : $dil_kod;
+	}
+
+	function getDilKelime($anahtar) {
+		global $db;
+		$current_lang = getCurrentDil();
+		
+		try {
+			$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ? LIMIT 1");
+			$query->execute([$anahtar, $current_lang]);
+			$kelime = $query->fetch(PDO::FETCH_ASSOC);
+			
+			return $kelime ? $kelime['deger'] : $anahtar;
+		} catch (PDOException $e) {
+			// Hata durumunda anahtarı döndür
+			return $anahtar;
+		}
+	}

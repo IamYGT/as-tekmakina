@@ -66,11 +66,44 @@
             </div>
             <div class="col-xl-2 col-lg-3 d-none d-lg-block">
                <div class="header-info f-left">
-                     <div class="info-item info-item-left">
-                        <span>Telefon</span>
-                        <h5><a href="tel:<?php echo $ayarlar["strPhone"]; ?>"><?php echo $ayarlar["strPhone"]; ?></a></h5>
+                  <div class="info-item info-item-left mb-2">
+                     <span>Telefon</span>
+                     <h5><a href="tel:<?php echo $ayarlar["strPhone"]; ?>"><?php echo $ayarlar["strPhone"]; ?></a></h5>
+                  </div>
+                  
+                  <div class="relative">
+                     <?php $diller = getDilListesi();
+                     if(count($diller)): 
+                         $current_lang = getCurrentDil();
+                     ?>
+                     <div class="relative inline-block text-left">
+                        <button type="button" 
+                                onclick="document.getElementById('language-dropdown').classList.toggle('hidden')"
+                                class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-transparent hover:bg-white/10 focus:outline-none rounded-md">
+                           <?php foreach($diller as $dil): 
+                               if($dil['dil_kod'] == $current_lang): ?>
+                                   <span class="fi fi-<?php echo getBayrakKodu($dil['dil_kod']); ?> mr-2"></span>
+                                   <?php echo $dil['dil_baslik']; ?>
+                               <?php endif; 
+                           endforeach; ?>
+                           <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                               <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                           </svg>
+                        </button>
+                        <div id="language-dropdown" class="hidden absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                           <div class="py-1">
+                               <?php foreach($diller as $dil): ?>
+                                   <a href="<?php echo $ayarlar["strURL"]; ?>/lang.php?l=<?php echo $dil['dil_kod']; ?>&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
+                                      class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                       <span class="fi fi-<?php echo getBayrakKodu($dil['dil_kod']); ?> mr-2"></span>
+                                       <?php echo $dil['dil_baslik']; ?>
+                                   </a>
+                               <?php endforeach; ?>
+                           </div>
+                        </div>
                      </div>
-
+                     <?php endif; ?>
+                  </div>
                </div>
             </div>
          </div>
@@ -88,6 +121,39 @@
             <a href="<?php echo $ayarlar["strURL"]; ?>/index">
             <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/logo-black.png" alt="logo">
             </a>
+         </div>
+
+         <div class="sidebar__language mb-20">
+            <?php $diller = getDilListesi();
+            if(count($diller)): 
+                $current_lang = getCurrentDil();
+            ?>
+            <div class="relative inline-block text-left w-full">
+                <button type="button" 
+                        onclick="document.getElementById('mobile-language-dropdown').classList.toggle('hidden')"
+                        class="inline-flex items-center justify-between w-full px-4 py-3 text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none border-b">
+                    <?php foreach($diller as $dil): 
+                        if($dil['dil_kod'] == $current_lang): ?>
+                            <span class="fi fi-<?php echo getBayrakKodu($dil['dil_kod']); ?> mr-2"></span>
+                            <?php echo $dil['dil_baslik']; ?>
+                        <?php endif; 
+                    endforeach; ?>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div id="mobile-language-dropdown" 
+                     class="hidden absolute left-0 right-0 mt-1 bg-white shadow-lg z-50">
+                    <?php foreach($diller as $dil): ?>
+                        <a href="<?php echo $ayarlar["strURL"]; ?>/lang.php?l=<?php echo $dil['dil_kod']; ?>&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
+                           class="flex items-center px-4 py-3 text-base text-gray-700 hover:bg-gray-100 border-b last:border-b-0">
+                            <span class="fi fi-<?php echo getBayrakKodu($dil['dil_kod']); ?> mr-2"></span>
+                            <?php echo $dil['dil_baslik']; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <?php endif; ?>
          </div>
 
          <div class="mobile-menu fix"></div>

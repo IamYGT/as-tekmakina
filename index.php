@@ -4,6 +4,25 @@
    <head>
        <title>Anasayfa - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
        <?php include 'css.php'; ?>
+       <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind ve mevcut CSS'in çakışmaması için özel stiller -->
+    <style>
+        /* Tailwind dropdown'ın üstte görünmesi için */
+        .header-info .relative {
+            z-index: 50;
+        }
+        
+        /* Hover durumunda dropdown'ın görünmesi için */
+        .group:hover .group-hover\:visible {
+            visibility: visible;
+        }
+        
+        .group:hover .group-hover\:opacity-100 {
+            opacity: 1;
+        }
+    </style>
+    <meta http-equiv="Content-Security-Policy" 
+          content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com;">
     </head>
    <body>
      <?php include 'ust.php'; ?>
