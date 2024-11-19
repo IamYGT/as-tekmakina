@@ -2,19 +2,8 @@
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Sadece dil seçici için Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
-<style type="text/tailwindcss">
-  @layer utilities {
-    .language-dropdown {
-      @apply absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50;
-    }
-    
-    .language-option {
-      @apply flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100;
-    }
-  }
-</style>
+<!-- Tailwind CSS -->
+<link href="<?php echo $ayarlar["strURL"]; ?>/assets/css/tailwind.css" rel="stylesheet">
 
 <!-- Diğer CSS dosyaları -->
 <link rel="stylesheet" href="<?php echo $ayarlar["strURL"]; ?>/assets/css/bootstrap.css">

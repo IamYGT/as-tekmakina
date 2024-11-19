@@ -413,12 +413,7 @@ include_once("Mobile_Detect.php");
 	// Dil ile ilgili fonksiyonlar
 	function getDilListesi() {
 		global $db;
-		try {
-			$query = $db->query("SELECT * FROM diller WHERE dil_durum = 1 ORDER BY dil_sira ASC");
-			return $query->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-			return [];
-		}
+		return $db->query("SELECT * FROM dil WHERE dil_durum = 1 ORDER BY dil_varsayilan DESC")->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 	function getVarsayilanDil() {
@@ -436,11 +431,8 @@ include_once("Mobile_Detect.php");
 
 	function getCurrentDil() {
 		global $cookie_adi;
-		if (isset($_COOKIE[$cookie_adi])) {
-			return $_COOKIE[$cookie_adi];
-		}
 		$varsayilan = getVarsayilanDil();
-		return $varsayilan['dil_kod'];
+		return isset($_COOKIE[$cookie_adi]) ? $_COOKIE[$cookie_adi] : $varsayilan['dil_kod'];
 	}
 
 	function getDilById($dil_kod) {
@@ -452,29 +444,10 @@ include_once("Mobile_Detect.php");
 	
 	
 	function getBayrakKodu($dil_kod) {
-		$bayrak_kodlari = [
-			'tr' => 'tr',
-			'en' => 'gb',
-			'de' => 'de',
-			'fr' => 'fr',
-			// diğer diller için bayrak kodları
-		];
-		
-		return isset($bayrak_kodlari[$dil_kod]) ? $bayrak_kodlari[$dil_kod] : $dil_kod;
-	}
-
-	function getDilKelime($anahtar) {
-		global $db;
-		$current_lang = getCurrentDil();
-		
-		try {
-			$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ? LIMIT 1");
-			$query->execute([$anahtar, $current_lang]);
-			$kelime = $query->fetch(PDO::FETCH_ASSOC);
-			
-			return $kelime ? $kelime['deger'] : $anahtar;
-		} catch (PDOException $e) {
-			// Hata durumunda anahtarı döndür
-			return $anahtar;
+		// İngilizce için özel durum
+		if (strtolower($dil_kod) == 'en') {
+			return 'gb';
 		}
+		// Diğer diller için normal kod
+		return strtolower(substr($dil_kod, 0, 2));
 	}
