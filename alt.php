@@ -109,3 +109,6 @@
       <script src="<?php echo $ayarlar["strURL"]; ?>/assets/js/imagesloaded-pkgd.js"></script>
       <script src="<?php echo $ayarlar["strURL"]; ?>/assets/js/ajax-form.js"></script>
       <script src="<?php echo $ayarlar["strURL"]; ?>/assets/js/main.js"></script>
+
+</body>
+</html>

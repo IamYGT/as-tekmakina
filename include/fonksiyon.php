@@ -354,12 +354,12 @@ include_once("Mobile_Detect.php");
 			$data = strip_tags($data);  
 		return $data;
 	}
-	function LANG($str, $lang) {
+	function LANG($anahtar, $lang) {
 		global $db;
-		$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE adi = ? AND kod = ?");
-		$query->execute([$str, $lang]);
+		$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ?");
+		$query->execute([$anahtar, $lang]);
 		$result = $query->fetch(PDO::FETCH_ASSOC);
-		return $result ? $result["deger"] : $str;
+		return $result ? $result["deger"] : $anahtar;
 	}
 
 	$cookie_adi = "LANG_COOKIE"; 
