@@ -4,13 +4,7 @@
    <head>
        <title>Anasayfa - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
        <?php include 'css.php'; ?>
-       <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com;
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
-                   font-src 'self' https://fonts.gstatic.com;
-                   img-src 'self' data: https:;
-                   connect-src 'self' https://cdn.tailwindcss.com;">
+      
     </head>
    <body>
      <?php include 'ust.php'; ?>

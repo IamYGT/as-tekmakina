@@ -70,13 +70,22 @@ include_once("Mobile_Detect.php");
 			return false;
 			}
 	}
-	function GetTableValue($column,$table,$where) {
-		global $db;
-		$q = $db->query("SELECT $column FROM $table $where")->fetch(PDO::FETCH_ASSOC);
-		return stripslashes($q[$column]);
+	function GetTableValue($column, $table, $where) {
+		try {
+			$db = checkDB();
+			$q = $db->query("SELECT $column FROM $table $where");
+			if ($q) {
+				$row = $q->fetch(PDO::FETCH_ASSOC);
+				return $row ? stripslashes($row[$column]) : null;
+			}
+			return null;
+		} catch (Exception $e) {
+			error_log("GetTableValue hatası: " . $e->getMessage());
+			return null;
+		}
 	}
 	function Seo_Link_Cevir($str, $options = array()){
-		 $str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
+		$str = mb_convert_encoding((string)$str, 'UTF-8', mb_list_encodings());
 		 $defaults = array(
 			 'delimiter' => '-',
 			 'limit' => null,
@@ -114,7 +123,7 @@ include_once("Mobile_Detect.php");
 			 'Ş' => 'S', 'İ' => 'I', 'Ç' => 'C', 'Ü' => 'U', 'Ö' => 'O', 'Ğ' => 'G',
 			 'ş' => 's', 'ı' => 'i', 'ç' => 'c', 'ü' => 'u', 'ö' => 'o', 'ğ' => 'g',
 			 // Russian
-			 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', 'Ж' => 'Zh',
+			 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', '����' => 'Zh',
 			 'З' => 'Z', 'И' => 'I', 'Й' => 'J', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
 			 'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
 			 'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sh', 'Ъ' => '', 'Ы' => 'Y', 'Ь' => '', 'Э' => 'E', 'Ю' => 'Yu',
@@ -155,81 +164,89 @@ include_once("Mobile_Detect.php");
 	 }
   
 	$catseo = 0; 
-	function getCategories($parent_id = 0, $menuid = 'main-menu', $class = 'top-menu'){
-		global $db;
-		$catseo= isset($_GET['catname']);
-		$subcat = false;
-		$attr = (!$parent_id) ? ' class="' . $class . '" id="' . $menuid . '"' : ' class="dropdown-menu"';
-		$attr2 = (!$parent_id) ? ' class="dropdown"' : ' class="dropdown-submenu"';
-		$attr3 = (!$parent_id) ? ' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"' : null;
-		$query = $db->query("SELECT * FROM kategoriler WHERE kategori_durum = 1 AND kategori_tipi = 1 AND dil_id = 'tr' ORDER BY altkategori_id");
-		foreach ($query as $row) {
-			if ($row['altkategori_id'] == $parent_id) {
-				if ($subcat === false) {
-					  $subcat = true;
-					  echo "<ul" . $attr . ">\n";
+	function getCategories($parent_id = 0, $menuid = 'main-menu', $class = 'top-menu') {
+		try {
+			$db = checkDB();
+			$catseo = isset($_GET['catname']);
+			$subcat = false;
+			$attr = (!$parent_id) ? ' class="' . $class . '" id="' . $menuid . '"' : ' class="dropdown-menu"';
+			$attr2 = (!$parent_id) ? ' class="dropdown"' : ' class="dropdown-submenu"';
+			$attr3 = (!$parent_id) ? ' class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"' : null;
+			
+			$query = $db->query("SELECT * FROM kategoriler WHERE kategori_durum = 1 AND kategori_tipi = 1 AND dil_id = 'tr' ORDER BY altkategori_id");
+			if ($query) {
+				foreach ($query as $row) {
+					if ($row['altkategori_id'] == $parent_id) {
+						if ($subcat === false) {
+							$subcat = true;
+							echo "<ul" . $attr . ">\n";
+						}
+						$active = ($row['kategori_seo'] == $catseo) ? " class=\"active\"" : "";
+						$url = '/kategori/' . $row['kategori_seo'];
+						
+						$link = '<a href="'.$url.'"' . $active . ' '.$attr3.'>' . $row['kategori_baslik'] . '</a>';
+						echo '<li' . $attr2 . '>';
+						echo $link;
+						getCategories($row["kategori_ust_id"]);
+						echo "</li>\n";
+					}
 				}
-				$active = ($row['kategori_seo'] == $catseo) ? " class=\"active\"" : "";
-				$url =  '/kategori/' . $row['kategori_seo'];
-
-				$link = '<a href="'.$url.'"' . $active . ' '.$attr3.'>' . $row['kategori_baslik'] . '</a>';
-				echo '<li' . $attr2 . '>';
-				echo $link;
-				getCategories($row["kategori_ust_id"]);
-				echo "</li>\n";
+				if ($subcat === true) {
+					echo "</ul>\n";
+				}
 			}
+		} catch (Exception $e) {
+			error_log("getCategories hatası: " . $e->getMessage());
 		}
-		unset($row);
-		if ($subcat === true)
-			echo "</ul>\n";
 	}
-	function CategoryOption($id = 0, $string = 0, $altkategori_id){		
-			global $db;
-			$list = $db->query("SELECT * FROM kategoriler WHERE altkategori_id = {$id} AND kategori_tipi = 1 AND dil_id = 'tr' "); 
-			if ($list->rowCount()){
-			foreach($list as $row) { 
-				echo '<option ';
-				echo $row["kategori_ust_id"] == $altkategori_id ? ' selected ' : null;
-				echo 'value="'.$row["kategori_ust_id"].'">'.str_repeat('-', $string).$row["kategori_baslik"].'</option>';
-				CategoryOption($row["kategori_ust_id"], $string + 2, $altkategori_id);
+	function CategoryOption($id = 0, $string = 0, $altkategori_id) {
+		try {
+			$db = checkDB();
+			$list = $db->query("SELECT * FROM kategoriler WHERE altkategori_id = {$id} AND kategori_tipi = 1 AND dil_id = 'tr'");
+			if ($list && $list->rowCount()) {
+				foreach($list as $row) {
+					echo '<option ';
+					echo $row["kategori_ust_id"] == $altkategori_id ? ' selected ' : null;
+					echo 'value="'.$row["kategori_ust_id"].'">'.str_repeat('-', $string).$row["kategori_baslik"].'</option>';
+					CategoryOption($row["kategori_ust_id"], $string + 2, $altkategori_id);
+				}
 			}
-		}else{
+		} catch (Exception $e) {
+			error_log("CategoryOption hatası: " . $e->getMessage());
 			return false;
-		}	 
+		}
 	}
 	
-	function CategoryList($id = 0, $string = 0, $altkategori_id){ 
-		global $db;
-		$list = $db->query("SELECT * FROM kategoriler  WHERE altkategori_id = {$id} AND kategori_tipi = 1 AND dil_id = 'tr'"); 
-		if ($list->rowCount()){
-			foreach($list as $row) {   
-				echo '
-					<tr role="row" class="even">  
-						<td>'.str_repeat('-', $string).$row["kategori_baslik"].'</td>
-						<td>
-					';
-							if($row["kategori_durum"]=="1") {
-				echo'		<span class="badge badge-rounded badge-secondary">Aktif</span>
-					';
-							} else {
-				echo'		<span class="badge badge-rounded badge-danger">Pasif</span>
-					';
-							}
-				echo'	</td>  
-
-						<td class="sorting_1">
-							<div class="d-flex">
-								<a class="contact-icon mr-3" href="'.AREA.'?do=edit&id='.$row["kategori_ust_id"].'"><i class="fas fa-edit" aria-hidden="true"></i></a>
-								<a class="contact-icon" href="'.AREA.'?do=delete&id='.$row["kategori_ust_id"].'"><i class="fas fa-trash-alt"></i></a>
-							</div>
-						</td>
-					</tr>
-					';
+	function CategoryList($id = 0, $string = 0, $altkategori_id) {
+		try {
+			$db = checkDB();
+			$list = $db->query("SELECT * FROM kategoriler WHERE altkategori_id = {$id} AND kategori_tipi = 1 AND dil_id = 'tr'");
+			if ($list && $list->rowCount()) {
+				foreach($list as $row) {
+					echo '
+						<tr role="row" class="even">
+							<td>'.str_repeat('-', $string).$row["kategori_baslik"].'</td>
+							<td>';
+					if($row["kategori_durum"]=="1") {
+						echo '<span class="badge badge-rounded badge-secondary">Aktif</span>';
+					} else {
+						echo '<span class="badge badge-rounded badge-danger">Pasif</span>';
+					}
+					echo '</td>
+							<td class="sorting_1">
+								<div class="d-flex">
+									<a class="contact-icon mr-3" href="'.AREA.'?do=edit&id='.$row["kategori_ust_id"].'"><i class="fas fa-edit" aria-hidden="true"></i></a>
+									<a class="contact-icon" href="'.AREA.'?do=delete&id='.$row["kategori_ust_id"].'"><i class="fas fa-trash-alt"></i></a>
+								</div>
+							</td>
+						</tr>';
+					CategoryList($row["kategori_ust_id"], $string + 2, $altkategori_id);
+				}
 			}
-				CategoryList($row["kategori_ust_id"], $string + 2, $altkategori_id);
-		}else{
+		} catch (Exception $e) {
+			error_log("CategoryList hatası: " . $e->getMessage());
 			return false;
-		}	 
+		}
 	} 
 	
 	 
@@ -266,38 +283,34 @@ include_once("Mobile_Detect.php");
 	}
 
 	function counter() {
-		global $db;	
-		$ziyaretci_ip = $_SERVER['REMOTE_ADDR'];
-		$detect = new Mobile_Detect;
-		if($detect->isMobile() == TRUE)
-			$ziyaretci_cihaz = 'mobile';
-		else if($detect->isTablet() == TRUE)
-			$ziyaretci_cihaz = 'tablet';
-		else
-			$ziyaretci_cihaz = 'desktop';
-		
+		try {
+			$db = checkDB();
+			$ziyaretci_ip = $_SERVER['REMOTE_ADDR'];
+			$detect = new Mobile_Detect;
 			
-		$guest_check = $db->prepare("SELECT * FROM ziyaretciler where ziyaretci_ip = ? AND ziyaretci_cihaz = ?");
-		$guest_check->execute(array($ziyaretci_ip,$ziyaretci_cihaz));
+			$ziyaretci_cihaz = $detect->isMobile() ? 'mobile' : 
+							   ($detect->isTablet() ? 'tablet' : 'desktop');
 			
-		if($guest_check->rowCount()>0) {
-		
-			$guest_id = $db->query("SELECT * FROM ziyaretciler where ziyaretci_ip = '$ziyaretci_ip' AND ziyaretci_cihaz = '$ziyaretci_cihaz'")->fetch(PDO::FETCH_ASSOC);
+			$guest_check = $db->prepare("SELECT * FROM ziyaretciler WHERE ziyaretci_ip = ? AND ziyaretci_cihaz = ?");
+			$guest_check->execute([$ziyaretci_ip, $ziyaretci_cihaz]);
 			
-			$update_query = $db->prepare("UPDATE ziyaretciler SET ziyaretci_sayac = ziyaretci_sayac+1 WHERE ziyaretci_id = ?");
-			$update_query->execute(array($guest_id["ziyaretci_id"]));
-			
-		} else {
-			$ziyaretci_tarayici = $_SERVER['HTTP_USER_AGENT']; //tarayıcı
-			$ziyaretci_dil = $_SERVER['HTTP_ACCEPT_LANGUAGE']; //tarayıcı dil
-			
-					$insert_query = $db->prepare("INSERT INTO ziyaretciler SET
-													ziyaretci_ip = ?,  
-													ziyaretci_cihaz = ?,   
-													ziyaretci_tarayici = ?,   
-													ziyaretci_dil = ?");
-					$insert_query->execute(array($ziyaretci_ip, $ziyaretci_cihaz, $ziyaretci_tarayici, $ziyaretci_dil)); 
-			 
+			if ($guest_check->rowCount() > 0) {
+				$guest_id = $guest_check->fetch(PDO::FETCH_ASSOC);
+				$update_query = $db->prepare("UPDATE ziyaretciler SET ziyaretci_sayac = ziyaretci_sayac + 1 WHERE ziyaretci_id = ?");
+				$update_query->execute([$guest_id["ziyaretci_id"]]);
+			} else {
+				$ziyaretci_tarayici = $_SERVER['HTTP_USER_AGENT'];
+				$ziyaretci_dil = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+				
+				$insert_query = $db->prepare("INSERT INTO ziyaretciler SET
+					ziyaretci_ip = ?,  
+					ziyaretci_cihaz = ?,   
+					ziyaretci_tarayici = ?,   
+					ziyaretci_dil = ?");
+				$insert_query->execute([$ziyaretci_ip, $ziyaretci_cihaz, $ziyaretci_tarayici, $ziyaretci_dil]);
+			}
+		} catch (Exception $e) {
+			error_log("Counter hatası: " . $e->getMessage());
 		}
 	}
 
@@ -355,11 +368,16 @@ include_once("Mobile_Detect.php");
 		return $data;
 	}
 	function LANG($anahtar, $lang) {
-		global $db;
-		$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ?");
-		$query->execute([$anahtar, $lang]);
-		$result = $query->fetch(PDO::FETCH_ASSOC);
-		return $result ? $result["deger"] : $anahtar;
+		try {
+			$db = checkDB();
+			$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ?");
+			$query->execute([$anahtar, $lang]);
+			$result = $query->fetch(PDO::FETCH_ASSOC);
+			return $result ? $result["deger"] : $anahtar;
+		} catch (Exception $e) {
+			error_log("LANG hatası: " . $e->getMessage());
+			return $anahtar;
+		}
 	}
 
 	$cookie_adi = "LANG_COOKIE"; 
@@ -412,19 +430,25 @@ include_once("Mobile_Detect.php");
 	
 	// Dil ile ilgili fonksiyonlar
 	function getDilListesi() {
-		global $db;
-		return $db->query("SELECT * FROM dil WHERE dil_durum = 1 ORDER BY dil_varsayilan DESC")->fetchAll(PDO::FETCH_ASSOC);
+		try {
+			$db = checkDB();
+			return $db->query("SELECT * FROM dil WHERE dil_durum = 1 ORDER BY dil_varsayilan DESC")
+					 ->fetchAll(PDO::FETCH_ASSOC);
+		} catch (Exception $e) {
+			error_log("getDilListesi hatası: " . $e->getMessage());
+			return [];
+		}
 	}
 
 	function getVarsayilanDil() {
-		global $db;
 		try {
+			$db = checkDB();
 			$query = $db->prepare("SELECT * FROM dil WHERE dil_varsayilan = 1 AND dil_durum = 1 LIMIT 1");
 			$query->execute();
 			$varsayilan = $query->fetch(PDO::FETCH_ASSOC);
 			return $varsayilan ?: ['dil_kod' => 'tr'];
-		} catch(PDOException $e) {
-			error_log("Dil sorgusu hatası: " . $e->getMessage());
+		} catch (Exception $e) {
+			error_log("getVarsayilanDil hatası: " . $e->getMessage());
 			return ['dil_kod' => 'tr'];
 		}
 	}
@@ -436,10 +460,15 @@ include_once("Mobile_Detect.php");
 	}
 
 	function getDilById($dil_kod) {
-		global $db;
-		$query = $db->prepare("SELECT * FROM dil WHERE dil_kod = ? AND dil_durum = 1");
-		$query->execute([$dil_kod]);
-		return $query->fetch(PDO::FETCH_ASSOC);
+		try {
+			$db = checkDB();
+			$query = $db->prepare("SELECT * FROM dil WHERE dil_kod = ? AND dil_durum = 1");
+			$query->execute([$dil_kod]);
+			return $query->fetch(PDO::FETCH_ASSOC);
+		} catch (Exception $e) {
+			error_log("getDilById hatası: " . $e->getMessage());
+			return null;
+		}
 	}
 	
 	
@@ -450,4 +479,12 @@ include_once("Mobile_Detect.php");
 		}
 		// Diğer diller için normal kod
 		return strtolower(substr($dil_kod, 0, 2));
+	}
+
+	function checkDB() {
+		global $db;
+		if (!$db) {
+			throw new Exception("Veritabanı bağlantısı bulunamadı");
+		}
+		return $db;
 	}

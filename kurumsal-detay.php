@@ -4,7 +4,7 @@ $tekil_veri_cek = $db->query("SELECT * FROM kurumsal WHERE haber_durum = 1 AND h
 <!DOCTYPE html>
 <html lang="tr">
    <head>
-       <title><?php echo $tekil_veri_cek["haber_baslik"]; ?> - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
+       <title><?php echo $tekil_veri_cek["haber_baslik"]; ?> - PUMADA GROUP DOO</title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -87,7 +87,7 @@ $tekil_veri_cek = $db->query("SELECT * FROM kurumsal WHERE haber_durum = 1 AND h
                   <div class="section__wrapper mb-55">
                      <h4 class="section__title">Hizmetlerimiz</h4>
                      <div class="r-text">
-                        <span>AS-TEK</span>
+                        <span>PUMADA GROUP</span>
                      </div>
                   </div>
                </div>
