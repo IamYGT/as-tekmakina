@@ -79,7 +79,7 @@ $baslangic = ($sayfa-1)*$limit;
                font-weight: 600;
                margin-bottom: 15px;
                line-height: 1.4;
-               color: #040404;
+               color: #221E1F;
                transition: color 0.3s ease;
            }
            
@@ -110,7 +110,7 @@ $baslangic = ($sayfa-1)*$limit;
            
            .news-link:hover {
                gap: 12px;
-               color: #040404;
+               color: #221E1F;
            }
            
            .news-link i {
@@ -137,7 +137,7 @@ $baslangic = ($sayfa-1)*$limit;
                height: 40px;
                border-radius: 8px;
                background: #fff;
-               color: #040404;
+               color: #221E1F;
                font-weight: 500;
                text-decoration: none;
                transition: all 0.3s ease;

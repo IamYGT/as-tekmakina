@@ -101,7 +101,7 @@ $_SESSION['current_lang_url'] = $dil_url[$lang];
            .news-detail__title {
                font-size: 32px;
                font-weight: 700;
-               color: #040404;
+               color: #221E1F;
                margin-bottom: 25px;
                line-height: 1.4;
            }
@@ -140,7 +140,7 @@ $_SESSION['current_lang_url'] = $dil_url[$lang];
            .sidebar-title {
                font-size: 20px;
                font-weight: 600;
-               color: #040404;
+               color: #221E1F;
                margin-bottom: 25px;
                padding-bottom: 15px;
                border-bottom: 2px solid #f5f5f5;
@@ -202,7 +202,7 @@ $_SESSION['current_lang_url'] = $dil_url[$lang];
                -webkit-line-clamp: 2;
                -webkit-box-orient: vertical;
                overflow: hidden;
-               color: #040404;
+               color: #221E1F;
                transition: color 0.3s ease;
            }
            
@@ -237,7 +237,7 @@ $_SESSION['current_lang_url'] = $dil_url[$lang];
                align-items: center;
                justify-content: space-between;
                padding: 15px 0;
-               color: #040404;
+               color: #221E1F;
                transition: all 0.3s ease;
            }
            

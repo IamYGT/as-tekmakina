@@ -25,19 +25,25 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
             padding: 30px 0;
         }
 
+        /* Kart Stilleri */
         .service-card {
             background: #fff;
-            border-radius: 12px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: inherit;
         }
 
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(218, 150, 62, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(218, 150, 62, 0.15);
         }
 
+        /* Resim Alanı */
         .service-image {
             position: relative;
             height: 250px;
@@ -48,22 +54,44 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .service-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(218, 150, 62, 0);
+            transition: all 0.4s ease;
         }
 
         .service-card:hover .service-image img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
+        .service-card:hover .service-image::after {
+            background: rgba(218, 150, 62, 0.2);
+        }
+
+        /* İçerik Alanı */
         .service-content {
             padding: 25px;
+            position: relative;
         }
 
         .service-title {
-            color: #040404;
-            font-size: 20px;
+            color: #221E1F;
+            font-size: 22px;
             font-weight: 600;
             margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover .service-title {
+            color: #da963e;
         }
 
         .service-description {
@@ -77,16 +105,14 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
             overflow: hidden;
         }
 
+        /* Link Alanı */
         .service-link {
             display: inline-flex;
             align-items: center;
             color: #da963e;
             font-weight: 500;
+            margin-top: 10px;
             transition: all 0.3s ease;
-        }
-
-        .service-link:hover {
-            color: #040404;
         }
 
         .service-link i {
@@ -94,13 +120,15 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
             transition: transform 0.3s ease;
         }
 
-        .service-link:hover i {
+        .service-card:hover .service-link i {
             transform: translateX(5px);
         }
 
+        /* Responsive Düzenlemeler */
         @media (max-width: 1024px) {
             .services-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
             }
         }
 
@@ -108,6 +136,18 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
             .services-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .service-title {
+                font-size: 20px;
+            }
+
+            .service-description {
+                font-size: 14px;
+            }
+
+            .service-image {
+                height: 220px;
             }
         }
     </style>
@@ -141,7 +181,8 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
         <div class="container">
             <div class="services-grid">
                 <?php foreach($hizmetler as $hizmet) { ?>
-                    <div class="service-card">
+                    <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $hizmet["haber_seo"]; ?>" 
+                       class="service-card">
                         <div class="service-image">
                             <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $hizmet["haber_resim"]; ?>" 
                                  alt="<?php echo $hizmet["haber_baslik"]; ?>">
@@ -151,13 +192,12 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
                             <p class="service-description">
                                 <?php echo strip_tags(mb_substr($hizmet["haber_aciklama"], 0, 150)) . '...'; ?>
                             </p>
-                            <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $hizmet["haber_seo"]; ?>" 
-                               class="service-link">
+                            <div class="service-link">
                                 <?php echo LANG('read_more', $lang); ?>
                                 <i class="fas fa-arrow-right"></i>
-                            </a>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 <?php } ?>
             </div>
         </div>

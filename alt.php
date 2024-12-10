@@ -1,5 +1,5 @@
       <footer>
-         <div class="footer-area pt-100 fix" style="background-color: #040404;">
+         <div class="footer-area pt-100 fix" style="background-color: #221E1F;">
             <div class="container">
                <div class="row">
                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">

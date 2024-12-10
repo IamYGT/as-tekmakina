@@ -51,7 +51,7 @@
   /* Tailwind özel renk tanımlamaları */
   :root {
     --color-primary: #da963e;
-    --color-secondary: #040404;
+    --color-secondary: #221E1F;
   }
 
   /* Tailwind utility class'ları */

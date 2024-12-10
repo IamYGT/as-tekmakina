@@ -1,7 +1,4 @@
 <!-- Language Selector -->
-<?php include 'components/language-switcher.php'; ?><!-- Scroll to Top Button -->
-
-
 
 <div class="progress-wrap">
     <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
@@ -12,7 +9,7 @@
 <!-- Header -->
 <header
     id="mainHeader"
-    class="fixed w-full top-0 left-0 z-40 bg-[#040404]">
+    class="fixed w-full top-0 left-0 z-40 transition-all duration-300">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-24">
             <!-- Mobile Menu Button ve Logo Container -->
@@ -98,7 +95,7 @@
                                         foreach ($kurumsal_menu as $menu) {
                                     ?>
                                             <a href="<?php echo $ayarlar["strURL"]; ?>/kurumsal/<?php echo $menu["haber_seo"]; ?>"
-                                                class="block px-4 py-2 text-[#040404] hover:bg-[#da963e]/10 hover:text-[#da963e] transition-colors duration-300">
+                                                class="block px-4 py-2 text-[#221E1F] hover:bg-[#da963e]/10 hover:text-[#da963e] transition-colors duration-300">
                                                 <?php echo $menu["haber_baslik"]; ?>
                                             </a>
                                     <?php }
@@ -128,7 +125,7 @@
                                         foreach ($hizmet_menu as $menu) {
                                     ?>
                                             <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $menu["haber_seo"]; ?>"
-                                                class="block px-4 py-2 text-[#040404] hover:bg-[#da963e]/10 hover:text-[#da963e] transition-colors duration-300">
+                                                class="block px-4 py-2 text-[#221E1F] hover:bg-[#da963e]/10 hover:text-[#da963e] transition-colors duration-300">
                                                 <?php echo $menu["haber_baslik"]; ?>
                                             </a>
                                     <?php }
@@ -222,7 +219,7 @@
 
     <!-- Mobile Menu Panel -->
     <div id="mobileMenuPanel"
-        class="lg:hidden fixed top-0 right-0 w-[300px] h-full bg-[#040404] z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
+        class="lg:hidden fixed top-0 right-0 w-[300px] h-full bg-[#221E1F] z-50 transform translate-x-full transition-transform duration-300 ease-in-out">
 
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b border-white/10">
@@ -607,12 +604,91 @@
         });
         activeDropdown = null;
     });
+
+    // Scroll kontrolü için yeni fonksiyon
+    function handleScroll() {
+        const header = document.getElementById('mainHeader');
+        const scrollPosition = window.scrollY;
+        
+        if (scrollPosition > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    // Scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Sayfa yüklendiğinde mevcut scroll pozisyonunu kontrol et
+    document.addEventListener('DOMContentLoaded', handleScroll);
+
+    // Mobil kontrol fonksiyonu - Güncellendi
+    function handleMobileHeader() {
+        const header = document.getElementById('mainHeader');
+        const isMobile = window.innerWidth < 1024;
+        
+        if (isMobile) {
+            header.classList.add('mobile');
+            // Scroll pozisyonuna göre arka plan rengini ayarla
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        } else {
+            header.classList.remove('mobile');
+            handleScroll();
+        }
+    }
+
+    // Scroll kontrolü güncellendi
+    function handleScroll() {
+        const header = document.getElementById('mainHeader');
+        const scrollPosition = window.scrollY;
+        const isMobile = window.innerWidth < 1024;
+        
+        if (isMobile) {
+            // Mobilde scroll pozisyonuna göre class ekle/çıkar
+            if (scrollPosition > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            return;
+        }
+        
+        // Desktop davranışı
+        if (scrollPosition > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+
+    // Sayfa yüklendiğinde ve resize olduğunda kontrol et
+    document.addEventListener('DOMContentLoaded', function() {
+        handleMobileHeader();
+        
+        // Scroll event listener
+        window.addEventListener('scroll', function() {
+            handleScroll();
+            handleMobileHeader(); // Mobil için scroll kontrolü
+        });
+        
+        // Resize event listener
+        window.addEventListener('resize', function() {
+            handleMobileHeader();
+            handleScroll();
+        });
+    });
 </script>
 
 <style>
     :root {
         --color-primary: #da963e;
-        --color-secondary: #040404;
+        --color-secondary: #221E1F;
     }
 
     .text-primary {
@@ -674,6 +750,75 @@
     #hizmetMenu {
         transition: all 0.2s ease-in-out;
         transform-origin: top;
+    }
+
+    /* Header Scroll Stilleri */
+    #mainHeader {
+        background: transparent;
+        backdrop-filter: blur(0);
+        transition: all 0.3s ease;
+    }
+
+    #mainHeader.scrolled {
+        background: rgba(4, 4, 4, 0.85);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Logo container için ek stiller */
+    .logo-container {
+        transition: all 0.3s ease;
+    }
+
+    .scrolled .logo-container {
+        transform: scale(0.9);
+    }
+
+    /* Menü linkleri için ek stiller */
+    .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    /* Header Scroll ve Mobil Stilleri */
+    #mainHeader {
+        background: transparent;
+        backdrop-filter: blur(0);
+        transition: all 0.3s ease;
+    }
+
+    /* Mobil stil */
+    #mainHeader.mobile {
+        background: transparent !important;
+        backdrop-filter: none !important;
+    }
+
+    #mainHeader.mobile.scrolled {
+        background: rgba(34, 30, 31, 1) !important;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Desktop scroll stil */
+    #mainHeader.scrolled:not(.mobile) {
+        background: rgba(34, 30, 31, 0.85);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive düzenlemeler */
+    @media (max-width: 1023px) { /* lg breakpoint */
+        #mainHeader {
+            background: transparent !important;
+            backdrop-filter: none !important;
+        }
+        
+        #mainHeader.scrolled {
+            background: rgba(34, 30, 31, 1) !important;
+        }
+        
+        .logo-container {
+            transform: scale(1) !important;
+        }
     }
 
 </style>

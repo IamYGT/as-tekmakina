@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         'primary': '#da963e',
-        'secondary': '#040404',
+        'secondary': '#221E1F',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',

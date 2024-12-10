@@ -19901,8 +19901,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 [data-primary="color_13"] .text-primary {
   color: #2a2a2a !important; }
 [data-primary="color_13"] .btn-primary:hover {
-  background-color: #040404;
-  border-color: #040404; }
+  background-color: #221E1F;
+  border-color: #221E1F; }
 [data-primary="color_13"] .btn-outline-primary {
   color: #2a2a2a;
   border-color: #2a2a2a; }
@@ -19915,8 +19915,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 [data-primary="color_13"] .btn-outline-primary:not(:disabled):not(.disabled):active,
 [data-primary="color_13"] .btn-outline-primary:not(:disabled):not(.disabled).active,
 [data-primary="color_13"] .show > .btn-outline-primary.dropdown-toggle {
-  background-color: #040404;
-  border-color: #040404; }
+  background-color: #221E1F;
+  border-color: #221E1F; }
 
 [data-primary="color_14"] a:hover, [data-primary="color_14"] a:focus, [data-primary="color_14"] a.active {
   color: #1367c8; }
@@ -23489,7 +23489,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  background: #000000;
+  background: #221E1F;
   padding: 3px;
   color: white;
   width: 17px;

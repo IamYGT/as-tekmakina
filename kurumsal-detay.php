@@ -53,8 +53,8 @@ $dil_karsiliklari = $db->query("SELECT k.haber_seo, k.dil_id, d.dil_kod, d.dil_b
        /* Genel Stiller */
        :root {
            --primary-color: #da963e;
-           --secondary-color: #040404;
-           --heading-color: #040404;
+           --secondary-color: #221E1F;
+           --heading-color: #221E1F;
        }
 
        /* About Bölümü */

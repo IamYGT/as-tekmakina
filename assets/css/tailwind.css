@@ -1236,7 +1236,7 @@ video {
   border-color: rgb(55 65 81 / var(--tw-border-opacity, 1));
 }
 
-.bg-\[\#040404\] {
+.bg-\[\#221E1F\] {
   --tw-bg-opacity: 1;
   background-color: rgb(4 4 4 / var(--tw-bg-opacity, 1));
 }
@@ -1477,7 +1477,7 @@ video {
   letter-spacing: 0.05em;
 }
 
-.text-\[\#040404\] {
+.text-\[\#221E1F\] {
   --tw-text-opacity: 1;
   color: rgb(4 4 4 / var(--tw-text-opacity, 1));
 }

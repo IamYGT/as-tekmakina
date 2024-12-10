@@ -17,7 +17,7 @@
     </button>
     
     <div id="desktop-lang-dropdown" 
-         class="hidden absolute right-0 mt-2 w-40 bg-[#040404] rounded-lg shadow-lg border border-white/10">
+         class="hidden absolute right-0 mt-2 w-40 bg-[#221E1F] rounded-lg shadow-lg border border-white/10">
         <?php foreach($diller as $dil): ?>
         <a href="<?php echo $ayarlar["strURL"]; ?>/lang.php?l=<?php echo $dil['dil_kod']; ?>&return=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" 
            class="flex items-center space-x-2 px-4 py-2 text-sm text-white hover:bg-[#da963e]/10 hover:text-[#da963e] transition-all duration-200">

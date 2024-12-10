@@ -51,7 +51,7 @@
            .brand__title {
                font-size: 18px;
                font-weight: 600;
-               color: #040404;
+               color: #221E1F;
                margin-bottom: 12px;
                transition: color 0.3s ease;
            }

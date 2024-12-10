@@ -34,13 +34,13 @@
                                 <div class="col-lg-12">
                                     <div class="slider-contant mt-25">
                                         <?php if($veri_listele["slayt_baslik"]) { ?>
-                                            <span data-animation="fadeInUp" data-delay=".3s">
+                                            <span data-animation="fadeInUp" data-delay=".3s" style="margin-bottom: 20px; display: block; color: #f5f5f5; font-size: 1.1em;">
                                                 <?php echo $veri_listele["slayt_baslik"]; ?>
                                             </span>
                                         <?php } ?>
 
                                         <?php if($veri_listele["slayt_aciklama"]) { ?>
-                                            <h2 class="slider-title" data-animation="fadeInUp" data-delay=".6s">
+                                            <h2 class="slider-title" data-animation="fadeInUp" data-delay=".6s" style="padding-top: 15px; font-size: 2.5em; font-weight: 600; line-height: 1.4; margin-bottom: 30px;">
                                                 <?php echo $veri_listele["slayt_aciklama"]; ?>
                                             </h2>
                                         <?php } ?>
@@ -207,7 +207,7 @@
                </div>
                <div class="col-xl-6 col-lg-6 col-md-6">
                   <div class="services__more text-md-end mb-50">
-                      <a href="<?php echo $ayarlar["strURL"]; ?>/hizmetler" class="tp-btn">
+                      <a href="<?php echo $ayarlar["strURL"]; ?>/hizmetler" class="tp-join-btn">
                           <?php echo LANG('tum_hizmetler', $lang); ?>
                           <i class="far fa-long-arrow-right"></i>
                       </a>
@@ -226,51 +226,46 @@
                    foreach($veri_cek as $veri_listele){
                ?>
                <div class="col-xl-4 col-lg-4 col-md-6">
-                  <div class="service-card" style="background: #fff; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 30px; transition: all 0.3s ease;">
-                     <!-- Ana Resim -->
-                     <div class="service-image" style="position: relative; height: 250px; overflow: hidden;">
-                        <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim"]; ?>" 
-                             alt="<?php echo $veri_listele["haber_baslik"]; ?>"
-                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;">
-                     </div>
-
-                     <!-- İçerik -->
-                     <div class="service-content" style="padding: 25px;">
-                        <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 15px; color: #040404;">
-                           <?php echo $veri_listele["haber_baslik"]; ?>
-                        </h3>
-                        <p style="color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                           <?php echo strip_tags(mb_substr($veri_listele["haber_aciklama"], 0, 150)) . '...'; ?>
-                        </p>
-
-                        <!-- Ek Resimler -->
-                        <div class="service-gallery" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;">
-                           <?php if($veri_listele["haber_resim2"]) { ?>
-                           <div class="gallery-item" style="height: 120px; border-radius: 8px; overflow: hidden;">
-                              <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim2"]; ?>" 
-                                   alt="<?php echo $veri_listele["haber_baslik"]; ?>"
-                                   style="width: 100%; height: 100%; object-fit: cover;">
-                           </div>
-                           <?php } ?>
-                           
-                           <?php if($veri_listele["haber_resim3"]) { ?>
-                           <div class="gallery-item" style="height: 120px; border-radius: 8px; overflow: hidden;">
-                              <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim3"]; ?>" 
-                                   alt="<?php echo $veri_listele["haber_baslik"]; ?>"
-                                   style="width: 100%; height: 100%; object-fit: cover;">
-                           </div>
-                           <?php } ?>
+                  <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $veri_listele["haber_seo"]; ?>" 
+                     class="service-card-link">
+                     <div class="service-card">
+                        <!-- Ana Resim -->
+                        <div class="service-image">
+                           <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim"]; ?>" 
+                                alt="<?php echo $veri_listele["haber_baslik"]; ?>">
+                           <div class="service-overlay"></div>
                         </div>
 
-                        <!-- Detay Linki -->
-                        <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $veri_listele["haber_seo"]; ?>" 
-                           class="service-link" 
-                           style="display: inline-flex; align-items: center; color: #da963e; font-weight: 500; text-decoration: none; transition: all 0.3s ease;">
-                           <?php echo LANG('detayli_bilgi', $lang); ?>
-                           <i class="fas fa-arrow-right" style="margin-left: 8px; transition: transform 0.3s ease;"></i>
-                        </a>
+                        <!-- İçerik -->
+                        <div class="service-content">
+                           <h3><?php echo $veri_listele["haber_baslik"]; ?></h3>
+                           <p><?php echo strip_tags(mb_substr($veri_listele["haber_aciklama"], 0, 150)) . '...'; ?></p>
+
+                           <!-- Ek Resimler -->
+                           <div class="service-gallery">
+                              <?php if($veri_listele["haber_resim2"]) { ?>
+                              <div class="gallery-item">
+                                 <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim2"]; ?>" 
+                                      alt="<?php echo $veri_listele["haber_baslik"]; ?>">
+                              </div>
+                              <?php } ?>
+                              
+                              <?php if($veri_listele["haber_resim3"]) { ?>
+                              <div class="gallery-item">
+                                 <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim3"]; ?>" 
+                                      alt="<?php echo $veri_listele["haber_baslik"]; ?>">
+                              </div>
+                              <?php } ?>
+                           </div>
+
+                           <!-- Detay Linki -->
+                           <div class="service-link">
+                              <?php echo LANG('detayli_bilgi', $lang); ?>
+                              <i class="fas fa-arrow-right"></i>
+                           </div>
+                        </div>
                      </div>
-                  </div>
+                  </a>
                </div>
                <?php
                    }
@@ -281,6 +276,148 @@
             </div>
          </div>
       </section>
+
+      <!-- Hizmetler için stil eklemeleri -->
+      <style>
+      .service-card-link {
+          display: block;
+          text-decoration: none;
+          color: inherit;
+      }
+
+      .service-card {
+          background: #fff;
+          border-radius: 15px;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+          overflow: hidden;
+          margin-bottom: 30px;
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          position: relative;
+      }
+
+      .service-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 15px 30px rgba(218, 150, 62, 0.15);
+      }
+
+      .service-image {
+          position: relative;
+          height: 250px;
+          overflow: hidden;
+      }
+
+      .service-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .service-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(218, 150, 62, 0);
+          transition: all 0.4s ease;
+      }
+
+      .service-card:hover .service-image img {
+          transform: scale(1.08);
+      }
+
+      .service-card:hover .service-overlay {
+          background: rgba(218, 150, 62, 0.2);
+      }
+
+      .service-content {
+          padding: 25px;
+          position: relative;
+      }
+
+      .service-content h3 {
+          font-size: 22px;
+          font-weight: 600;
+          margin-bottom: 15px;
+          color: #221E1F;
+          transition: color 0.3s ease;
+      }
+
+      .service-card:hover .service-content h3 {
+          color: #da963e;
+      }
+
+      .service-content p {
+          color: #666;
+          font-size: 15px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+      }
+
+      .service-gallery {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin: 20px 0;
+      }
+
+      .gallery-item {
+          height: 120px;
+          border-radius: 8px;
+          overflow: hidden;
+          position: relative;
+      }
+
+      .gallery-item img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+      }
+
+      .service-card:hover .gallery-item img {
+          transform: scale(1.05);
+      }
+
+      .service-link {
+          display: inline-flex;
+          align-items: center;
+          color: #da963e;
+          font-weight: 500;
+          margin-top: 10px;
+          transition: all 0.3s ease;
+      }
+
+      .service-link i {
+          margin-left: 8px;
+          transition: transform 0.3s ease;
+      }
+
+      .service-card:hover .service-link i {
+          transform: translateX(5px);
+      }
+
+
+
+      @media (max-width: 768px) {
+          .service-content h3 {
+              font-size: 20px;
+          }
+          
+          .service-content p {
+              font-size: 14px;
+          }
+          
+          .gallery-item {
+              height: 100px;
+          }
+      }
+      </style>
 
       <!-- Referanslar Bölümü -->
       <section class="brand__area pb-80 pt-50">
@@ -398,7 +535,7 @@
 
       .brand-title {
           font-size: 16px;
-          color: #040404;
+          color: #221E1F;
           margin-bottom: 8px;
           font-weight: 600;
           transition: color 0.3s ease;

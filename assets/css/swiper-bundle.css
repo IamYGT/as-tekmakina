@@ -193,7 +193,7 @@
 }
 .swiper-button-prev.swiper-button-black,
 .swiper-button-next.swiper-button-black {
-  --swiper-navigation-color: #000000;
+  --swiper-navigation-color: #221E1F;
 }
 .swiper-button-lock {
   display: none;
@@ -340,7 +340,7 @@ button.swiper-pagination-bullet {
   --swiper-pagination-color: #ffffff;
 }
 .swiper-pagination-black {
-  --swiper-pagination-color: #000000;
+  --swiper-pagination-color: #221E1F;
 }
 .swiper-pagination-lock {
   display: none;

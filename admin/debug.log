@@ -183,3 +183,40 @@
 [10-Dec-2024 11:18:33 Europe/Istanbul] LANGUAGE_DEFAULT: en
 [10-Dec-2024 11:18:33 Europe/Istanbul] Toplam proje sayısı: 0
 [10-Dec-2024 11:18:33 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
+[10-Dec-2024 16:11:27 Europe/Istanbul] Aktif dil sayısı: 3
+[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
+(
+    [dil_id] => 1
+    [dil_baslik] => Türkçe
+    [dil_resim] => flag-tr.png
+    [dil_kod] => tr
+    [dil_varsayilan] => 2
+    [dil_durum] => 1
+)
+
+[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
+(
+    [dil_id] => 2
+    [dil_baslik] => English
+    [dil_resim] => flag-gb.png
+    [dil_kod] => en
+    [dil_varsayilan] => 1
+    [dil_durum] => 1
+)
+
+[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
+(
+    [dil_id] => 9
+    [dil_baslik] => Srpski
+    [dil_resim] => flag-rs.png
+    [dil_kod] => rs
+    [dil_varsayilan] => 2
+    [dil_durum] => 1
+)
+
+[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam TR proje sayısı: 0
+[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam proje sayısı: 0
+[10-Dec-2024 16:11:27 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
+[10-Dec-2024 16:11:27 Europe/Istanbul] LANGUAGE_DEFAULT: en
+[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam proje sayısı: 0
+[10-Dec-2024 16:11:27 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
