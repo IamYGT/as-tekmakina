@@ -5,6 +5,12 @@
 <!-- Tailwind CSS -->
 <link href="<?php echo $ayarlar["strURL"]; ?>/assets/css/tailwind.css" rel="stylesheet">
 
+<link rel="icon" type="image/x-icon" href="<?php echo $ayarlar["strURL"]; ?>/assets/img/favicon/favicon.ico">
+<link rel="icon" type="image/svg+xml" href="<?php echo $ayarlar["strURL"]; ?>/assets/img/favicon/favicon.svg">
+<link rel="icon" type="image/png" sizes="96x96" href="<?php echo $ayarlar["strURL"]; ?>/assets/img/favicon/favicon-96x96.png">
+<link rel="apple-touch-icon" href="<?php echo $ayarlar["strURL"]; ?>/assets/img/favicon/apple-touch-icon.png">
+<link rel="manifest" href="<?php echo $ayarlar["strURL"]; ?>/assets/img/favicon/site.webmanifest">
+
 <!-- Diğer CSS dosyaları -->
 <link rel="stylesheet" href="<?php echo $ayarlar["strURL"]; ?>/assets/css/bootstrap.css">
 <link rel="stylesheet" href="<?php echo $ayarlar["strURL"]; ?>/assets/css/meanmenu.css">
@@ -20,26 +26,25 @@
 <link rel="stylesheet" href="<?php echo $ayarlar["strURL"]; ?>/assets/css/style.css">
 
 <!-- Flag Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css@4.1.7/css/flag-icons.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css@4.1.7/css/flag-icons.min.css" />
 
 
 
-<!-- Favicon -->
-<link rel="icon" type="image/x-icon" href="<?php echo $ayarlar["strURL"]; ?>/favicon.ico">
+
 
 <script>
-document.addEventListener('click', function(event) {
+  document.addEventListener('click', function(event) {
     const dropdowns = ['language-dropdown', 'mobile-language-dropdown'];
-    
+
     dropdowns.forEach(function(id) {
-        const dropdown = document.getElementById(id);
-        const button = event.target.closest('button');
-        
-        if (dropdown && !button && !dropdown.contains(event.target)) {
-            dropdown.classList.add('hidden');
-        }
+      const dropdown = document.getElementById(id);
+      const button = event.target.closest('button');
+
+      if (dropdown && !button && !dropdown.contains(event.target)) {
+        dropdown.classList.add('hidden');
+      }
     });
-});
+  });
 </script>
 
 <style>
@@ -50,10 +55,27 @@ document.addEventListener('click', function(event) {
   }
 
   /* Tailwind utility class'ları */
-  .bg-primary { background-color: var(--color-primary); }
-  .bg-secondary { background-color: var(--color-secondary); }
-  .text-primary { color: var(--color-primary); }
-  .text-secondary { color: var(--color-secondary); }
-  .border-primary { border-color: var(--color-primary); }
-  .border-secondary { border-color: var(--color-secondary); }
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+
+  .text-primary {
+    color: var(--color-primary);
+  }
+
+  .text-secondary {
+    color: var(--color-secondary);
+  }
+
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+
+  .border-secondary {
+    border-color: var(--color-secondary);
+  }
 </style>

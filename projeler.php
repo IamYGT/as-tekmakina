@@ -1,8 +1,8 @@
 <?php require("include/baglan.php"); include("include/fonksiyon.php"); include_once("inc.lang.php"); ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="<?php echo $lang; ?>">
    <head>
-       <title>Projeler - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
+       <title><?php echo LANG('menu_projeler', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -15,11 +15,11 @@
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                            <li><span>Projeler</span></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><span><?php echo LANG('menu_projeler', $lang); ?></span></li>
                         </ul>
                     </div>
-                     <h3 class="page__title mt-20">Projeler</h3>
+                     <h3 class="page__title mt-20"><?php echo LANG('menu_projeler', $lang); ?></h3>
                   </div>
                </div>
             </div>
@@ -29,34 +29,65 @@
        <div class="container">
            <div id="portfolio-grid" class="row grid">
              <?php
-                 $veri_cek = $db->query("SELECT * FROM projeler WHERE proje_durum = 1");
-                 if ($veri_cek->rowCount()){
-                 foreach($veri_cek as $veri_listele){
-           ?> <div class="col-lg-4 col-md-6 grid-item cat2 cat4">
-                <div class="portfolio-item mb-30">
-                   <div class="portfolio-wrapper">
-                      <div class="portfolio-image w-img">
-                        <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>"> <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $veri_listele["proje_resim"]; ?>" alt="<?php echo 	$veri_listele["proje_baslik"]; ?>"> </a>
-                      </div>
-                      <div class="portfolio-caption">
-                         <p>As-Tek Kimya San. ve Tic. Ltd. Şti.</p>
-                         <h6><a href="#"><?php echo 	$veri_listele["proje_baslik"]; ?></a></h6>
-                      </div>
-                      <div class="portfolio-caption-top">
-                         <p><a href="#">As-Tek Kimya San. ve Tic. Ltd. Şti.</a></p>
-                         <h6><a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>"><?php echo 	$veri_listele["proje_baslik"]; ?></a></h6>
-                      </div>
-                      <div class="portfolio-caption-bottom">
-                         <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>"><i class="fa-light fa-arrow-right-long"></i></a>
-                      </div>
-                   </div>
-                </div>
-             </div>
-             <?php
+                 $veri_cek = $db->query("SELECT * FROM projeler WHERE proje_durum = 1 AND dil_id = '$lang' ORDER BY proje_ust_id ASC");
+                 
+                 error_log("Projeler sorgusu için dil: " . $lang);
+                 error_log("Bulunan proje sayısı: " . $veri_cek->rowCount());
+                 
+                 if ($veri_cek->rowCount()) {
+                     foreach($veri_cek as $veri_listele) {
+             ?> <div class="col-lg-4 col-md-6 grid-item">
+                    <div class="portfolio-item mb-30">
+                       <div class="portfolio-wrapper">
+                          <div class="portfolio-image w-img">
+                            <?php if($veri_listele["proje_resim"]) { ?>
+                                <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                                    <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $veri_listele["proje_resim"]; ?>" 
+                                         alt="<?php echo $veri_listele["proje_baslik"]; ?>">
+                                </a>
+                            <?php } else { ?>
+                                <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                                    <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/no-image.jpg" 
+                                         alt="<?php echo $veri_listele["proje_baslik"]; ?>">
+                                </a>
+                            <?php } ?>
+                          </div>
+                          <div class="portfolio-caption">
+                             <p><?php echo LANG('proje_detay', $lang); ?></p>
+                             <h6>
+                                 <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                                     <?php echo $veri_listele["proje_baslik"]; ?>
+                                 </a>
+                             </h6>
+                          </div>
+                          <div class="portfolio-caption-top">
+                             <p><?php echo LANG('proje_detay', $lang); ?></p>
+                             <h6>
+                                 <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                                     <?php echo $veri_listele["proje_baslik"]; ?>
+                                 </a>
+                             </h6>
+                          </div>
+                          <div class="portfolio-caption-bottom">
+                             <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                                 <i class="fa-light fa-arrow-right-long"></i>
+                             </a>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 <?php
                      }
-                   }else{
-                     "Listelenecek veri bulunamadı.";
-                   }
+                 } else {
+                     echo '<div class="col-12 text-center">
+                             <div class="alert alert-warning">
+                                 '.LANG('listelenecek_veri_bulunamadi', $lang).'
+                             </div>
+                           </div>';
+                     
+                     $tum_projeler = $db->query("SELECT * FROM projeler")->rowCount();
+                     error_log("Toplam proje sayısı: " . $tum_projeler);
+                 }
              ?>
             </div>
        </div>

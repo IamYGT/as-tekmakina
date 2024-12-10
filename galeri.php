@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="tr">
    <head>
-       <title>Galeri - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları</title>
+       <title><?php echo LANG('galeri', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -15,11 +15,11 @@
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                            <li><span>Galeri</span></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><span><?php echo LANG('menu_galeri', $lang); ?></span></li>
                         </ul>
                     </div>
-                     <h3 class="page__title mt-20">Galeri</h3>
+                     <h3 class="page__title mt-20"><?php echo LANG('menu_galeri', $lang); ?></h3>
                   </div>
                </div>
             </div>
@@ -36,7 +36,7 @@
           ?>  <div class="col-xl-4 col-lg-6 col-md-6">
                   <div class="team__item-grid mb-30">
                      <div class="team__item-grid-thumb w-img">
-                        <a href="<?php echo $ayarlar["strURL"]; ?>/uploads/files/<?php echo $row["name"]?>"  class="popup-link" ><img src="<?php echo $ayarlar["strURL"]; ?>/uploads/files/<?php echo $row["name"]?>" alt="As-Tek Makina Galeri"></a>
+                        <a href="<?php echo $ayarlar["strURL"]; ?>/uploads/files/<?php echo $row["name"]?>"  class="popup-link" ><img src="<?php echo $ayarlar["strURL"]; ?>/uploads/files/<?php echo $row["name"]?>" alt="<?php echo $ayarlar["strTitle"]; ?>"></a>
                      </div>
                   </div>
                </div>

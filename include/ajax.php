@@ -57,7 +57,7 @@
 							'islemSonuc' => false,
 							'islemMsj' => '<div class="alert alert-danger solid alert-dismissible fade show">
 												<strong>İşlem Sonucu!</strong>
-												<p>Row güncellenirken bir hata oluştu.</p>
+												<p>Row g��ncellenirken bir hata oluştu.</p>
 											</div>'
 						);
 					}
@@ -434,7 +434,7 @@
 							'islemSonuc' => true, 
 							'islemMsj' => '<div class="alert alert-secondary solid alert-dismissible fade show">
 												<strong>İşlem Sonucu!</strong>
-												<p>Başarılı şekilde Row güncellendi.</p>
+												<p>Başar��lı şekilde Row güncellendi.</p>
 											</div>'
 						);
 					} else {
@@ -458,6 +458,41 @@
 				if(isset($response)){
 					echo json_encode($response);
 				}
+			}else if($do == 'projects' && $action == 'row') {
+				try {
+					if(!isset($_POST['item']) || !is_array($_POST['item'])) {
+						throw new Exception('Geçersiz sıralama verisi');
+					}
+
+					$db->beginTransaction();
+					
+					$items = $_POST['item'];
+					$count = 1;
+					
+					foreach($items as $item) {
+						$update = $db->prepare("UPDATE projeler SET row = ? WHERE proje_ust_id = ?");
+						$result = $update->execute([$count, $item]);
+						
+						if(!$result) {
+							throw new Exception('Sıralama güncellenirken hata oluştu');
+						}
+						
+						$count++;
+					}
+					
+					$db->commit();
+					$response = array('status' => 'success', 'message' => 'Sıralama güncellendi');
+					
+				} catch(Exception $e) {
+					if($db->inTransaction()) {
+						$db->rollBack();
+					}
+					$response = array('status' => 'error', 'message' => 'Hata: ' . $e->getMessage());
+				}
+				
+				header('Content-Type: application/json');
+				echo json_encode($response);
+				exit;
 			}
 		}
 	}

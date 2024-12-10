@@ -1,5 +1,5 @@
 ﻿<?php require("../include/baglan.php");include("../include/fonksiyon.php");
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
+		if(!isset($_SESSION['LOGIN']) ) {
 			go("index.php",0);
 			exit();
 		}
@@ -84,7 +84,15 @@
 									</thead>
 									<tbody id="sortable">
 <?php
-									$list = $db->query("SELECT * FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ORDER BY row ASC LIMIT $baslangic,$limit");
+									$list = $db->query("SELECT h.*, 
+													   GROUP_CONCAT(DISTINCT h2.dil_id) as diller,
+													   GROUP_CONCAT(DISTINCT h2.haber_baslik ORDER BY h2.dil_id SEPARATOR '|||') as basliklar
+													    FROM hizmetler h 
+													    LEFT JOIN hizmetler h2 ON h.haber_ust_id = h2.haber_ust_id 
+													    WHERE h.dil_id = 'tr' 
+													    GROUP BY h.haber_ust_id 
+													    ORDER BY h.row ASC 
+													    LIMIT $baslangic,$limit");
 										if ($list->rowCount()){
 											foreach($list as $row){
 ?>
@@ -152,23 +160,67 @@
 					if(!empty($_POST['haber_baslik']) || !empty($_POST['haber_aciklama'])) {
 						$LastID = $db->query("SELECT haber_id FROM ".TABLE." ORDER BY haber_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 						$LastID = $LastID["haber_id"]+1;
+						
+						// Ana resim
 						$upload = new Upload($_FILES['haber_resim']);
 						if ($upload->uploaded) {
-								$upload->file_auto_rename = true;
-								$upload->process("../uploads/services");
-							if ($upload->processed){
+							$upload->file_auto_rename = true;
+							$upload->process("../uploads/services");
+							if ($upload->processed) {
 								$haber_resim = $upload->file_dst_name;
-							} else {
-								$error = Bilgilendirme::Hata("Hay Aksi! Bir hata meydana geldi.".$upload->error);
 							}
 						}
+						
+						// İkinci resim
+						$upload2 = new Upload($_FILES['haber_resim2']);
+						if ($upload2->uploaded) {
+							$upload2->file_auto_rename = true;
+							$upload2->process("../uploads/services");
+							if ($upload2->processed) {
+								$haber_resim2 = $upload2->file_dst_name;
+							}
+						}
+						
+						// Üçüncü resim
+						$upload3 = new Upload($_FILES['haber_resim3']);
+						if ($upload3->uploaded) {
+							$upload3->file_auto_rename = true;
+							$upload3->process("../uploads/services");
+							if ($upload3->processed) {
+								$haber_resim3 = $upload3->file_dst_name;
+							}
+						}
+
 						foreach ($_POST AS $k=>$v) {
 							$v = $v;
 							if (substr($k,0,5) == "form_") {
 								$key = str_replace("form_","",$k);
-								$insert = $db->prepare("INSERT INTO ".TABLE." SET haber_baslik = ?, haber_seo = ?, haber_aciklama = ?, haber_description = ?, haber_kisaaciklama = ?,  haber_resim = ?, dil_id = ?, haber_durum = ?, haber_ust_id = ?");
-								$insert->execute(array($haber_baslik[$key], Seo_Link_Cevir($haber_baslik[$key]), $haber_aciklama[$key], $haber_description[$key], $haber_kisaaciklama[$key], $haber_resim, $key, $haber_durum, $LastID));
-								$last_id = $db->lastInsertId();
+								$insert = $db->prepare("INSERT INTO ".TABLE." SET 
+									haber_baslik = ?, 
+									haber_seo = ?, 
+									haber_aciklama = ?, 
+									haber_description = ?, 
+									haber_kisaaciklama = ?,  
+									haber_resim = ?, 
+									haber_resim2 = ?, 
+									haber_resim3 = ?, 
+									dil_id = ?, 
+									haber_durum = ?, 
+									haber_ust_id = ?");
+								
+								$insert->execute(array(
+									$haber_baslik[$key], 
+									Seo_Link_Cevir($haber_baslik[$key]), 
+									$haber_aciklama[$key], 
+									$haber_description[$key], 
+									$haber_kisaaciklama[$key], 
+									$haber_resim,
+									$haber_resim2,
+									$haber_resim3,
+									$key, 
+									$haber_durum, 
+									$LastID
+								));
 							}
 						}
 						if ($insert) {
@@ -247,9 +299,9 @@
 					<div class="col-xl-4 col-xxl-4">
                         <div class="card">
                             <div class="card-body p-3">
-								<div class="form-group">
-									<label for="">Resim 1160x600</label>
-									<small class="form-text text-muted">Seçmiş olduğunuz resim veri içeriğinde kullanılmaktadır.</small>
+								<div class="form-group mb-4">
+									<label>Ana Resim (1160x600)</label>
+									<small class="form-text text-muted">Ana görsel olarak kullanılacak resim.</small>
 									<div class="fileinput fileinput-new" data-provides="fileinput">
 										<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
 											<img src="https://via.placeholder.com/287x192.png?text=Select+Image" class="img-fluid img-thumbnail" alt="">
@@ -264,10 +316,50 @@
 										</div>
 									</div>
 								</div>
+
+								<!-- Ek Resim 2 -->
+								<div class="form-group mb-4">
+									<label>Ek Resim 1 (570x380) <small class="text-muted">(Opsiyonel)</small></label>
+									<small class="form-text text-muted">Sol alt bölümde gösterilecek ek resim.</small>
+									<div class="fileinput fileinput-new" data-provides="fileinput">
+										<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
+											<img src="https://via.placeholder.com/287x192.png?text=Select+Image" class="img-fluid img-thumbnail" alt="">
+										</div>
+										<div>
+											<span class="btn btn-primary btn-sm btn-file">
+												<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
+												<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
+												<input type="file" name="haber_resim2" accept="image/*" id="haber_resim2">
+											</span>
+											<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Ek Resim 3 -->
+								<div class="form-group mb-4">
+									<label>Ek Resim 2 (570x380) <small class="text-muted">(Opsiyonel)</small></label>
+									<small class="form-text text-muted">Sağ alt bölümde gösterilecek ek resim.</small>
+									<div class="fileinput fileinput-new" data-provides="fileinput">
+										<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
+											<img src="https://via.placeholder.com/287x192.png?text=Select+Image" class="img-fluid img-thumbnail" alt="">
+										</div>
+										<div>
+											<span class="btn btn-primary btn-sm btn-file">
+												<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
+												<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
+												<input type="file" name="haber_resim3" accept="image/*" id="haber_resim3">
+											</span>
+											<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Yayın Durumu -->
 								<div class="form-group">
 									<label for="">Yayın Durumu</label>
 									<select name="haber_durum" class="form-control">
-										<option value="1">Aktif</option>
+										<option value="1" selected>Aktif</option>
 										<option value="2">Pasif</option>
 									</select>
 								</div>
@@ -286,28 +378,85 @@
 					if(isset($submitControl)){
 						if(!empty($_POST['haber_baslik']) || !empty($_POST['haber_aciklama'])) {
 							$image_info = $db->query("SELECT * FROM ".TABLE." WHERE haber_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
-								$upload = new Upload($_FILES['haber_resim']);
-								if(!isset($_FILES['haber_resim']['name'])) {
-									$haber_resim = null;
-								} else if(!empty($_FILES['haber_resim']['name'])) {
-									$upload->file_auto_rename = true;
-									$upload->process("../uploads/services");
-									if ($upload->processed) {
-										$haber_resim = $upload->file_dst_name;
-									} else {
-										$haber_resim = null;
-									}
+							
+							// Ana resim
+							$upload = new Upload($_FILES['haber_resim']);
+							if(!isset($_FILES['haber_resim']['name'])) {
+								$haber_resim = null;
+							} else if(!empty($_FILES['haber_resim']['name'])) {
+								$upload->file_auto_rename = true;
+								$upload->process("../uploads/services");
+								if ($upload->processed) {
+									$haber_resim = $upload->file_dst_name;
 								} else {
-									$haber_resim = $image_info["haber_resim"];
+									$haber_resim = null;
 								}
+							} else {
+								$haber_resim = $image_info["haber_resim"];
+							}
+							
+							// İkinci resim
+							$upload2 = new Upload($_FILES['haber_resim2']);
+							if(!isset($_FILES['haber_resim2']['name'])) {
+								$haber_resim2 = null;
+							} else if(!empty($_FILES['haber_resim2']['name'])) {
+								$upload2->file_auto_rename = true;
+								$upload2->process("../uploads/services");
+								if ($upload2->processed) {
+									$haber_resim2 = $upload2->file_dst_name;
+								} else {
+									$haber_resim2 = null;
+								}
+							} else {
+								$haber_resim2 = $image_info["haber_resim2"];
+							}
+							
+							// Üçüncü resim
+							$upload3 = new Upload($_FILES['haber_resim3']);
+							if(!isset($_FILES['haber_resim3']['name'])) {
+								$haber_resim3 = null;
+							} else if(!empty($_FILES['haber_resim3']['name'])) {
+								$upload3->file_auto_rename = true;
+								$upload3->process("../uploads/services");
+								if ($upload3->processed) {
+									$haber_resim3 = $upload3->file_dst_name;
+								} else {
+									$haber_resim3 = null;
+								}
+							} else {
+								$haber_resim3 = $image_info["haber_resim3"];
+							}
 
 							foreach ($_POST AS $k=>$v) {
 								$v = $v;
 								if (substr($k,0,5) == "form_") {
 									$key = str_replace("form_","",$k);
-
-									$update = $db->prepare("UPDATE ".TABLE." SET  haber_baslik = ?, haber_seo = ?, haber_aciklama = ?, haber_description = ?, haber_kisaaciklama = ?,  haber_resim = ?, haber_durum = ? WHERE haber_ust_id = ? AND dil_id = ?");
-									$update->execute(array($haber_baslik[$key], Seo_Link_Cevir($haber_baslik[$key]), $haber_aciklama[$key],  $haber_description[$key], $haber_kisaaciklama[$key],  $haber_resim, $haber_durum, $id, $key));
+									
+									$update = $db->prepare("UPDATE ".TABLE." SET  
+										haber_baslik = ?, 
+										haber_seo = ?, 
+										haber_aciklama = ?, 
+										haber_description = ?, 
+										haber_kisaaciklama = ?,  
+										haber_resim = ?, 
+										haber_resim2 = ?, 
+										haber_resim3 = ?, 
+										haber_durum = ? 
+										WHERE haber_ust_id = ? AND dil_id = ?");
+									
+									$update->execute(array(
+										$haber_baslik[$key], 
+										Seo_Link_Cevir($haber_baslik[$key]), 
+										$haber_aciklama[$key],  
+										$haber_description[$key], 
+										$haber_kisaaciklama[$key],  
+										$haber_resim,
+										$haber_resim2,
+										$haber_resim3,
+										$haber_durum, 
+										$id, 
+										$key
+									));
 								}
 							}
 							if ($update) {
@@ -387,51 +536,79 @@
 					<div class="col-xl-4 col-xxl-4">
                         <div class="card">
                             <div class="card-body p-3">
-								<div class="form-group">
-								<label>Resim 870x510</label>
-								<small class="form-text text-muted">Seçmiş olduğunuz resim veri içeriğinde kullanılmaktadır.</small>
-								<?php if(empty($row_info["haber_resim"])) {?>
-										<div class="fileinput fileinput-new" data-provides="fileinput">
-											<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
-												<img src="resim-sec.png" class="img-fluid img-thumbnail" alt="">
+								<div class="form-group mb-4">
+									<label>Ana Resim (1160x600)</label>
+									<small class="form-text text-muted">Ana görsel olarak kullanılacak resim.</small>
+									<div class="fileinput fileinput-new" data-provides="fileinput">
+										<?php if(!empty($row_info["haber_resim"])) { ?>
+											<div class="fileinput-preview img-thumbnail" style="max-width: 300px;">
+												<img src="../uploads/services/<?php echo $row_info["haber_resim"]; ?>" class="img-fluid">
 											</div>
-											<div>
-												<span class="btn btn-primary btn-sm btn-file">
-													<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
-													<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
-													<input type="file" name="haber_resim" accept="image/*" id="haber_resim">
-												</span>
-												<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
-											</div>
+										<?php } ?>
+										<div class="mt-2">
+											<span class="btn btn-primary btn-file">
+												<span class="fileinput-new">Resim Seç</span>
+												<span class="fileinput-exists">Değiştir</span>
+												<input type="file" name="haber_resim">
+											</span>
+											<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Kaldır</a>
 										</div>
-								<?php }else{?>
-										<div class="fileinput fileinput-exists" data-provides="fileinput">
-											<div class="fileinput-new thumbnail" style="width: 200px; height: 190px;">
-												<img src="resim-sec.png" class="img-fluid img-thumbnail" alt="" />
-											</div>
-											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 303px; max-height: 190px; line-height: 190px;"><img src="../uploads/services/<?php echo $row_info["haber_resim"]; ?>" class="img-fluid img-thumbnail"></div>
-											<div>
-												<span class="btn btn-primary btn-sm btn-file">
-													<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
-													<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
-													<input type="file" name="haber_resim" id="haber_resim" >
-													<div class="ripple-container"></div>
-												</span>
-												<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
-											</div>
-										</div>
-								<?php }?>
+									</div>
 								</div>
+
+								<!-- Ek Resim 2 -->
+								<div class="form-group mb-4">
+									<label>Ek Resim 1 (570x380)</label>
+									<small class="form-text text-muted">Sol alt bölümde gösterilecek ek resim.</small>
+									<div class="fileinput fileinput-new" data-provides="fileinput">
+										<?php if(!empty($row_info["haber_resim2"])) { ?>
+											<div class="fileinput-preview img-thumbnail" style="max-width: 300px;">
+												<img src="../uploads/services/<?php echo $row_info["haber_resim2"]; ?>" class="img-fluid">
+											</div>
+										<?php } ?>
+										<div class="mt-2">
+											<span class="btn btn-primary btn-file">
+												<span class="fileinput-new">Resim Seç</span>
+												<span class="fileinput-exists">Değiştir</span>
+												<input type="file" name="haber_resim2">
+											</span>
+											<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Kaldır</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Ek Resim 3 -->
+								<div class="form-group mb-4">
+									<label>Ek Resim 2 (570x380)</label>
+									<small class="form-text text-muted">Sağ alt bölümde gösterilecek ek resim.</small>
+									<div class="fileinput fileinput-new" data-provides="fileinput">
+										<?php if(!empty($row_info["haber_resim3"])) { ?>
+											<div class="fileinput-preview img-thumbnail" style="max-width: 300px;">
+												<img src="../uploads/services/<?php echo $row_info["haber_resim3"]; ?>" class="img-fluid">
+											</div>
+										<?php } ?>
+										<div class="mt-2">
+											<span class="btn btn-primary btn-file">
+												<span class="fileinput-new">Resim Seç</span>
+												<span class="fileinput-exists">Değiştir</span>
+												<input type="file" name="haber_resim3">
+											</span>
+											<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Kaldır</a>
+										</div>
+									</div>
+								</div>
+
+								<!-- Yayın Durumu -->
 								<div class="form-group">
 									<label for="">Yayın Durumu</label>
 									<select name="haber_durum" class="form-control">
-										<option value="1" <?php if ($row_info["haber_durum"] == "1") { echo "selected";}?>>Aktif</option>
-										<option value="2" <?php if ($row_info["haber_durum"] == "2") { echo "selected";}?>>Pasif</option>
+										<option value="1" <?php echo ($row_info["haber_durum"] == 1) ? 'selected' : ''; ?>>Aktif</option>
+										<option value="2" <?php echo ($row_info["haber_durum"] == 2) ? 'selected' : ''; ?>>Pasif</option>
 									</select>
 								</div>
-                            </div>
-                        </div>
-                    </div>
+							</div>
+						</div>
+					</div>
 				</form>
 <?php
 					}

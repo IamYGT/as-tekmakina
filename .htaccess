@@ -32,3 +32,7 @@
 
 	RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-p-([a-zA-Z0-9_-]+)$ /pages.php?q1=$1&q2=$2&q3=$3 [L,QSA]
 	RewriteRule ^([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)-c-([a-zA-Z0-9_-]+)$ projeler.php?catname=$1&catname2=$2&catname3=$3 [L,QSA]
+
+# Dil değiştirme kuralları
+RewriteRule ^([a-z]{2})/hizmet/([^/]+)/?$ hizmet-detay.php?lang=$1&url=$2 [L,QSA]
+RewriteRule ^hizmet/([^/]+)/?$ hizmet-detay.php?url=$1 [L,QSA]

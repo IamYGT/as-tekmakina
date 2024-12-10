@@ -1,5 +1,5 @@
 ﻿<?php require("../include/baglan.php");include("../include/fonksiyon.php");
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
+		if(!isset($_SESSION['LOGIN'])) {
 			go("index.php",0);
 			exit();
 		}
@@ -84,19 +84,56 @@
 									</thead>
 									<tbody id="sortable">
 <?php
-									$list = $db->query("SELECT * FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ORDER BY row ASC LIMIT $baslangic,$limit");
+									$list = $db->query("SELECT h.*, 
+    GROUP_CONCAT(DISTINCT h2.dil_id) as diller,
+    GROUP_CONCAT(DISTINCT h2.haber_baslik ORDER BY h2.dil_id SEPARATOR '|||') as basliklar
+    FROM ".TABLE." h 
+    LEFT JOIN ".TABLE." h2 ON h.haber_ust_id = h2.haber_ust_id 
+    WHERE h.dil_id = 'tr'
+    GROUP BY h.haber_ust_id 
+    ORDER BY h.row ASC, h.haber_id DESC 
+    LIMIT $baslangic,$limit");
+
+									// Debug için
+									error_log("Haber admin sorgusu sonucu: " . $list->rowCount() . " kayıt bulundu");
+
 										if ($list->rowCount()){
 											foreach($list as $row){
 ?>
 										<tr id="item-<?php echo $row["haber_ust_id"]; ?>" role="row" class="even">
-											<td class="sortable ui-sortable-handle" style="width:20px"><i class="fa fa-sort"></i></td>
-											<td class=""><?php echo $row["haber_baslik"]; ?></td>
-											<td class=""><?php if(isset($row["haber_resim"])){ ?><img class="mr-3 " width="60" src="../uploads/haberler/<?php echo $row["haber_resim"]; ?>" alt="<?php echo $row["haber_baslik"]; ?>"><?php }else{ ?><img class="mr-3 " width="60" src="images/no_images.png" alt="<?php echo $row["haber_baslik"]; ?>"><?php } ?></td>
-											<td class=""><?php echo $row["haber_tarih"]; ?></td>
-											<td class="sorting_1">
+											<td class="sortable" style="width:20px">
+												<i class="fa fa-sort"></i>
+											</td>
+											<td>
+												<?php echo $row["haber_baslik"]; ?>
+												<div class="mt-1">
+													<?php
+													foreach($db->query("SELECT * FROM dil WHERE dil_durum = 1") as $dil) {
+														if(in_array($dil["dil_kod"], explode(',', $row["diller"]))) {
+															echo '<span class="badge badge-success mr-1">'.$dil["dil_kod"].'</span>';
+														} else {
+															echo '<span class="badge badge-danger mr-1">'.$dil["dil_kod"].'</span>';
+														}
+													}
+													?>
+												</div>
+											</td>
+											<td>
+												<?php if($row["haber_resim"]) { ?>
+													<img src="../uploads/haberler/<?php echo $row["haber_resim"]; ?>" width="50" alt="">
+												<?php } else { ?>
+													<img src="images/no-image.jpg" width="50" alt="">
+												<?php } ?>
+											</td>
+											<td><?php echo $row["haber_tarih"]; ?></td>
+											<td>
 												<div class="d-flex">
-													<a class="contact-icon mr-3" href="<?php echo AREA; ?>?do=edit&id=<?php echo $row["haber_ust_id"]; ?>"><i class="fas fa-edit" aria-hidden="true"></i></a>
-													<a class="contact-icon" href="<?php echo AREA; ?>?do=delete&id=<?php echo $row["haber_ust_id"]; ?>"><i class="fas fa-trash-alt"></i></a>
+													<a class="btn btn-primary btn-sm mr-2" href="<?php echo AREA; ?>?do=edit&id=<?php echo $row["haber_ust_id"]; ?>">
+														<i class="fa fa-edit"></i>
+													</a>
+													<a class="btn btn-danger btn-sm" href="<?php echo AREA; ?>?do=delete&id=<?php echo $row["haber_ust_id"]; ?>" onclick="return confirm('Silmek istediğinize emin misiniz?')">
+														<i class="fa fa-trash"></i>
+													</a>
 												</div>
 											</td>
 										</tr>
@@ -286,83 +323,129 @@
 				}
 ?>
 <?php
-			}else if($do == 'edit') {
+			} else if($do == 'edit') {
 				$row_check = $db->prepare("SELECT * FROM ".TABLE." WHERE haber_ust_id = ?");
 				$row_check->execute(array($id));
 				if ($row_check->rowCount() > 0) {
 					if(isset($submitControl)){
 						if(!empty($_POST['haber_baslik']) || !empty($_POST['haber_aciklama'])) {
 							$image_info = $db->query("SELECT * FROM ".TABLE." WHERE haber_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
-
-								$upload = new Upload($_FILES['haber_resim']);
-								if(!isset($_FILES['haber_resim']['name'])) {
-									$haber_resim = null;
-								} else if(!empty($_FILES['haber_resim']['name'])) {
-									$upload->file_auto_rename = true;
-									$upload->process("../uploads/haberler");
-									if ($upload->processed) {
-										$haber_resim = $upload->file_dst_name;
-									} else {
-										$haber_resim = null;
-									}
+							
+							// Resim yükleme işlemi
+							$upload = new Upload($_FILES['haber_resim']);
+							if(!isset($_FILES['haber_resim']['name'])) {
+								$haber_resim = null;
+							} else if(!empty($_FILES['haber_resim']['name'])) {
+								$upload->file_auto_rename = true;
+								$upload->process("../uploads/haberler");
+								if ($upload->processed) {
+									$haber_resim = $upload->file_dst_name;
 								} else {
-									$haber_resim = $image_info["haber_resim"];
+									$haber_resim = null;
 								}
-
-
-
+							} else {
+								$haber_resim = $image_info["haber_resim"];
+							}
 
 							foreach ($_POST AS $k=>$v) {
-								$v = $v;
 								if (substr($k,0,5) == "form_") {
 									$key = str_replace("form_","",$k);
-
-									$update = $db->prepare("UPDATE ".TABLE." SET  haber_baslik = ?, haber_seo = ?, haber_aciklama = ?, haber_description = ?,   haber_kisaaciklama = ?,  haber_resim = ?,  haber_durum = ? WHERE haber_ust_id = ? AND dil_id = ?");
-									$update->execute(array($haber_baslik[$key], Seo_Link_Cevir($haber_baslik[$key]), $haber_aciklama[$key],  $haber_description[$key],    $haber_kisaaciklama[$key],  $haber_resim,   $haber_durum, $id, $key));
+									
+									// Önce bu dil için kayıt var mı kontrol edelim
+									$check = $db->prepare("SELECT * FROM ".TABLE." WHERE haber_ust_id = ? AND dil_id = ?");
+									$check->execute([$id, $key]);
+									
+									if($check->rowCount() > 0) {
+										// Güncelleme yapalım
+										$update = $db->prepare("UPDATE ".TABLE." SET 
+											haber_baslik = ?,
+											haber_seo = ?,
+											haber_aciklama = ?,
+											haber_description = ?,
+											haber_kisaaciklama = ?,
+											haber_resim = ?,
+											haber_durum = ?
+											WHERE haber_ust_id = ? AND dil_id = ?");
+										
+										$update->execute([
+											$haber_baslik[$key],
+											Seo_Link_Cevir($haber_baslik[$key]),
+											$haber_aciklama[$key],
+											$haber_description[$key],
+											$haber_kisaaciklama[$key],
+											$haber_resim,
+											$haber_durum,
+											$id,
+											$key
+										]);
+									} else {
+										// Yeni kayıt ekleyelim
+										$insert = $db->prepare("INSERT INTO ".TABLE." SET 
+											haber_baslik = ?,
+											haber_seo = ?,
+											haber_aciklama = ?,
+											haber_description = ?,
+											haber_kisaaciklama = ?,
+											haber_resim = ?,
+											dil_id = ?,
+											haber_durum = ?,
+											haber_ust_id = ?");
+										
+										$insert->execute([
+											$haber_baslik[$key],
+											Seo_Link_Cevir($haber_baslik[$key]),
+											$haber_aciklama[$key],
+											$haber_description[$key],
+											$haber_kisaaciklama[$key],
+											$haber_resim,
+											$key,
+											$haber_durum,
+											$id
+										]);
+									}
 								}
 							}
-							if ($update) {
-								echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
-								$error = Bilgilendirme::Basarili("Başarılı şekilde Eklendi, görüntülemek üzere yönlendiriliyorsunuz..");
-							}else {
-								$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");
-							}
-						}else{
-							$error = Bilgilendirme::Hata("Hoppala! Boş alan bıraktınız.");
+							
+							echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
+							$error = Bilgilendirme::Basarili("Başarılı şekilde güncellendi");
+							
+						} else {
+							$error = Bilgilendirme::Hata("Boş alan bıraktınız");
 						}
-					} else {
+					}
+					
+					// Form için mevcut değerleri çekelim
 					$row_info = $db->query("SELECT * FROM ".TABLE." WHERE haber_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
 ?>
-
-				<form action="#" method="POST" enctype="multipart/form-data" id="form" style="display: inline-flex; ">
-					<div class="col-xl-8 col-xxl-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Haber Düzenle</h4>
-                            </div>
-                            <div class="card-body">
-								<div class="step-app" id="demo">
-									<ul class="step-steps">
-<?php
-							$list = $db->query("select * from dil where dil_durum = '1'");
-								foreach ($list AS $row) {
-									$LANGUAGE_ID = $row["dil_id"];
-									$LANGUAGE_CODE = $row["dil_kod"];
-									$LANGUAGE_TITLE = $row["dil_baslik"];
-?>
-									  <li data-step-target="step<?php echo $LANGUAGE_ID; ?>"><?php echo $LANGUAGE_TITLE; ?></li>
-<?php
-								}
-?>
-									</ul>
-									<div class="step-content">
-<?php
-										$list = $db->query("select * from dil where dil_durum = '1'");
+					<form action="#" method="POST" enctype="multipart/form-data" id="form" style="display: inline-flex; ">
+						<div class="col-xl-8 col-xxl-8">
+							<div class="card">
+								<div class="card-header">
+									<h4 class="card-title">Haberi Düzenle</h4>
+								</div>
+								<div class="card-body">
+									<div class="step-app" id="demo">
+										<ul class="step-steps">
+											<?php
+											$list = $db->query("select * from dil where dil_durum = '1'");
 											foreach ($list AS $row) {
 												$LANGUAGE_ID = $row["dil_id"];
 												$LANGUAGE_CODE = $row["dil_kod"];
 												$LANGUAGE_TITLE = $row["dil_baslik"];
-?>
+											?>
+												<li data-step-target="step<?php echo $LANGUAGE_ID; ?>"><?php echo $LANGUAGE_TITLE; ?></li>
+											<?php
+											}
+											?>
+										</ul>
+										<div class="step-content">
+											<?php
+											$list = $db->query("select * from dil where dil_durum = '1'");
+											foreach ($list AS $row) {
+												$LANGUAGE_ID = $row["dil_id"];
+												$LANGUAGE_CODE = $row["dil_kod"];
+												$LANGUAGE_TITLE = $row["dil_baslik"];
+											?>
 												<div class="step-tab-panel" data-step="step<?php echo $LANGUAGE_ID; ?>">
 													<div class="row">
 														<div class="col-lg-12 mb-2">
@@ -371,12 +454,10 @@
 																<input type="text" name="haber_baslik[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Başlık" required="" value="<?php echo GetTableValue("haber_baslik",TABLE,"where haber_ust_id = {$id} and dil_id = '{$LANGUAGE_CODE}' "); ?>">
 															</div>
 														</div>
-										 
-
 														<div class="col-lg-12 mb-2">
 															<div class="form-group">
-																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Kısa Açıklaması</label>
-																<input type="text" name="haber_kisaaciklama[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Kısa Açıklaması" required="" value="<?php echo GetTableValue("haber_kisaaciklama",TABLE,"where haber_ust_id = {$id} and dil_id = '{$LANGUAGE_CODE}' "); ?>">
+																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Kısa Açıklama</label>
+																<input type="text" name="haber_kisaaciklama[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Kısa Açıklama" required="" value="<?php echo GetTableValue("haber_kisaaciklama",TABLE,"where haber_ust_id = {$id} and dil_id = '{$LANGUAGE_CODE}' "); ?>">
 															</div>
 														</div>
 														<div class="col-lg-12 mb-2">
@@ -388,87 +469,81 @@
 													</div>
 													<input type="hidden" name="form_<?php echo $LANGUAGE_CODE; ?>" value="<?php echo $LANGUAGE_CODE; ?>" />
 												</div>
-<?php
+											<?php
 											}
-?>
-									</div>
-									    <div class="step-footer pull-right">
+											?>
+										</div>
+										<div class="step-footer pull-right">
 											<button data-step-action="prev" class="step-btn1 btn btn-rounded btn-primary">Geri</button>
 											<button data-step-action="next" class="step-btn1 btn btn-rounded btn-primary">İleri</button>
 											<button data-step-action="finish" class="step-btn1 btn btn-rounded btn-primary" type="submit">Kaydet</button>
 											<input type="hidden" name="submitControl" value="1" />
 										</div>
+									</div>
 								</div>
-                            </div>
-                        </div>
-                    </div>
-					<div class="col-xl-4 col-xxl-4">
-                        <div class="card">
-                            <div class="card-body p-3">
-								<div class="form-group">
-								<label>Resim 870x510</label>
-								<small class="form-text text-muted">Seçmiş olduğunuz resim veri içeriğinde kullanılmaktadır.</small>
-								<?php if(empty($row_info["haber_resim"])) {?>
-										<div class="fileinput fileinput-new" data-provides="fileinput">
-											<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
-												<img src="resim-sec.png" class="img-fluid img-thumbnail" alt="">
+							</div>
+						</div>
+						<div class="col-xl-4 col-xxl-4">
+							<div class="card">
+								<div class="card-body p-3">
+									<div class="form-group">
+										<label>Resim 870x510</label>
+										<small class="form-text text-muted">Seçmiş olduğunuz resim veri içeriğinde kullanılmaktadır.</small>
+										<?php if(empty($row_info["haber_resim"])) { ?>
+											<div class="fileinput fileinput-new" data-provides="fileinput">
+												<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
+													<img src="resim-sec.png" class="img-fluid img-thumbnail" alt="">
+												</div>
+												<div>
+													<span class="btn btn-primary btn-sm btn-file">
+														<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
+														<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
+														<input type="file" name="haber_resim" accept="image/*" id="haber_resim">
+													</span>
+													<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
+												</div>
 											</div>
-											<div>
-												<span class="btn btn-primary btn-sm btn-file">
-													<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
-													<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
-													<input type="file" name="haber_resim" accept="image/*" id="haber_resim">
-												</span>
-												<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
+										<?php } else { ?>
+											<div class="fileinput fileinput-exists" data-provides="fileinput">
+												<div class="fileinput-preview thumbnail" style="width: 100%;height: 190px;line-height: 190px;">
+													<img src="../uploads/haberler/<?php echo $row_info["haber_resim"]; ?>" class="img-fluid img-thumbnail" alt="">
+												</div>
+												<div>
+													<span class="btn btn-primary btn-sm btn-file">
+														<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
+														<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
+														<input type="file" name="haber_resim" accept="image/*" id="haber_resim">
+													</span>
+													<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
+												</div>
 											</div>
-										</div>
-								<?php }else{?>
-										<div class="fileinput fileinput-exists" data-provides="fileinput">
-											<div class="fileinput-new thumbnail" style="width: 200px; height: 190px;">
-												<img src="resim-sec.png" class="img-fluid img-thumbnail" alt="" />
-											</div>
-											<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 303px; max-height: 190px; line-height: 190px;"><img src="../uploads/haberler/<?php echo $row_info["haber_resim"]; ?>" class="img-fluid img-thumbnail"></div>
-											<div>
-												<span class="btn btn-primary btn-sm btn-file">
-													<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
-													<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
-													<input type="file" name="haber_resim" id="haber_resim" >
-													<div class="ripple-container"></div>
-												</span>
-												<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
-											</div>
-										</div>
-								<?php }?>
+										<?php } ?>
+									</div>
+									<div class="form-group">
+										<label for="">Yayın Durumu</label>
+										<select name="haber_durum" class="form-control">
+											<option value="1" <?php if ($row_info["haber_durum"] == "1") { echo "selected";}?>>Aktif</option>
+											<option value="2" <?php if ($row_info["haber_durum"] == "2") { echo "selected";}?>>Pasif</option>
+										</select>
+									</div>
 								</div>
-								 <div class="form-group">
-									<label for="">Yayın Durumu</label>
-									<select name="haber_durum" class="form-control">
-										<option value="1" <?php if ($row_info["haber_durum"] == "1") { echo "selected";}?>>Aktif</option>
-										<option value="2" <?php if ($row_info["haber_durum"] == "2") { echo "selected";}?>>Pasif</option>
-									</select>
-								</div>
-                            </div>
-                        </div>
-                    </div>
-				</form>
-<?php
-					}
-
-?>
+							</div>
+						</div>
+					</form>
 <?php
 				} else {
-					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı.");
+					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı");
 				}
-?>
-<?php
-			}else if($_GET["do"] == 'delete') {
+			} else if($do == 'delete') {
 				$row_check = $db->prepare("SELECT * FROM ".TABLE." WHERE haber_ust_id = ?");
 				$row_check->execute(array($id));
 				if ($row_check->rowCount() > 0) {
-					$update = $db->exec("DELETE FROM ".TABLE." WHERE haber_ust_id = {$id};");
+					$update = $db->prepare("DELETE FROM ".TABLE." WHERE haber_ust_id = ?");
+					$update->execute(array($id));
 					if($update) {
 						echo '<meta http-equiv="refresh" content="1;url='.AREA.'">';
- 					}else{
+						$error = Bilgilendirme::Basarili("Başarılı şekilde silindi");
+					} else {
 						$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");
 					}
 				}

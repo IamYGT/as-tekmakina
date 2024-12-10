@@ -1,5 +1,5 @@
 ﻿<?php require("../include/baglan.php");include("../include/fonksiyon.php");
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
+		if(!isset($_SESSION['LOGIN'])) {
 			go("index.php",0);
 			exit();
 		}
@@ -87,7 +87,19 @@
 									</thead>
 									<tbody id="sortable">
 <?php
-									$list = $db->query("SELECT * FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ORDER BY row ASC LIMIT $baslangic,$limit");
+									$list = $db->query("SELECT s.*, 
+    GROUP_CONCAT(DISTINCT s2.dil_id) as diller,
+    GROUP_CONCAT(DISTINCT s2.slayt_baslik ORDER BY s2.dil_id SEPARATOR '|||') as basliklar
+    FROM ".TABLE." s 
+    LEFT JOIN ".TABLE." s2 ON s.slayt_ust_id = s2.slayt_ust_id 
+    WHERE s.dil_id = 'tr'
+    GROUP BY s.slayt_ust_id 
+    ORDER BY s.row ASC, s.slayt_id DESC 
+    LIMIT $baslangic,$limit");
+
+									// Debug için
+									error_log("Slayt admin sorgusu sonucu: " . $list->rowCount() . " kayıt bulundu");
+
 										if ($list->rowCount()){
 											foreach($list as $row){
 ?>
@@ -171,8 +183,26 @@
 							$v = $v;
 							if (substr($k,0,5) == "form_") {
 								$key = str_replace("form_","",$k);
-								$insert = $db->prepare("INSERT INTO ".TABLE." SET slayt_baslik = ?, slayt_aciklama = ?, slayt_buton = ?, slayt_butonlink = ?, slayt_resim = ?, dil_id = ?, slayt_durum = ?, slayt_ust_id = ?");
-								$insert->execute(array($slayt_baslik[$key], $slayt_aciklama[$key], $slayt_buton[$key], $slayt_butonlink[$key],  $slayt_resim, $key, $slayt_durum, $LastID));
+								$insert = $db->prepare("INSERT INTO ".TABLE." SET 
+									slayt_baslik = ?,
+									slayt_aciklama = ?,
+									slayt_buton = ?,
+									slayt_butonlink = ?,
+									slayt_resim = ?,
+									dil_id = ?,
+									slayt_durum = ?,
+									slayt_ust_id = ?");
+								
+								$insert->execute([
+									$slayt_baslik[$key],
+									$slayt_aciklama[$key],
+									$slayt_buton[$key],
+									$slayt_butonlink[$key],
+									$slayt_resim,
+									$key,
+									$slayt_durum,
+									$LastID
+								]);
 								$last_id = $db->lastInsertId();
 							}
 						}
@@ -317,23 +347,65 @@
 								}
 
 							foreach ($_POST AS $k=>$v) {
-								$v = $v;
 								if (substr($k,0,5) == "form_") {
 									$key = str_replace("form_","",$k);
-									$update = $db->prepare("UPDATE ".TABLE." SET  slayt_baslik = ?, slayt_aciklama = ?, slayt_buton = ?, slayt_butonlink = ?, slayt_resim = ?, slayt_durum = ? WHERE slayt_ust_id = ? AND dil_id = ?");
-									$update->execute(array($slayt_baslik[$key], $slayt_aciklama[$key],$slayt_buton[$key], $slayt_butonlink[$key], $slayt_resim, $slayt_durum, $id, $key));
+									
+									$check = $db->prepare("SELECT * FROM ".TABLE." WHERE slayt_ust_id = ? AND dil_id = ?");
+									$check->execute([$id, $key]);
+									
+									if($check->rowCount() > 0) {
+										$update = $db->prepare("UPDATE ".TABLE." SET 
+											slayt_baslik = ?,
+											slayt_aciklama = ?,
+											slayt_buton = ?,
+											slayt_butonlink = ?,
+											slayt_resim = ?,
+											slayt_durum = ?
+											WHERE slayt_ust_id = ? AND dil_id = ?");
+											
+										$update->execute([
+											$slayt_baslik[$key],
+											$slayt_aciklama[$key],
+											$slayt_buton[$key],
+											$slayt_butonlink[$key],
+											$slayt_resim,
+											$slayt_durum,
+											$id,
+											$key
+										]);
+									} else {
+										$insert = $db->prepare("INSERT INTO ".TABLE." SET 
+											slayt_baslik = ?,
+											slayt_aciklama = ?,
+											slayt_buton = ?,
+											slayt_butonlink = ?,
+											slayt_resim = ?,
+											dil_id = ?,
+											slayt_durum = ?,
+											slayt_ust_id = ?");
+											
+										$insert->execute([
+											$slayt_baslik[$key],
+											$slayt_aciklama[$key],
+											$slayt_buton[$key],
+											$slayt_butonlink[$key],
+											$slayt_resim,
+											$key,
+											$slayt_durum,
+											$id
+										]);
+									}
 								}
 							}
-							if ($update) {
-								echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
-								$error = Bilgilendirme::Basarili("Başarılı şekilde Eklendi, görüntülemek üzere yönlendiriliyorsunuz..");
-							}else {
-								$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");
-							}
-						}else{
-							$error = Bilgilendirme::Hata("Hoppala! Boş alan bıraktınız.");
+							
+							echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
+							$error = Bilgilendirme::Basarili("Başarılı şekilde güncellendi");
+							
+						} else {
+							$error = Bilgilendirme::Hata("Boş alan bıraktınız");
 						}
-					} else {
+					}
+					
 					$row_info = $db->query("SELECT * FROM ".TABLE." WHERE slayt_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
 ?>
 
@@ -463,12 +535,8 @@
                     </div>
 				</form>
 <?php
-					}
-
-?>
-<?php
 				} else {
-					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı.");
+					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı");
 				}
 ?>
 <?php

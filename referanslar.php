@@ -1,8 +1,8 @@
 <?php require("include/baglan.php"); include("include/fonksiyon.php"); include_once("inc.lang.php"); ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="<?php echo $lang; ?>">
    <head>
-       <title>Referanslar - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
+       <title><?php echo LANG('menu_referanslar', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -15,11 +15,11 @@
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                            <li><span>Referanslar</span></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><span><?php echo LANG('menu_referanslar', $lang); ?></span></li>
                         </ul>
                     </div>
-                     <h3 class="page__title mt-20">Referanslar</h3>
+                     <h3 class="page__title mt-20"><?php echo LANG('menu_referanslar', $lang); ?></h3>
                   </div>
                </div>
             </div>
@@ -31,8 +31,8 @@
       <div class="row">
          <div class="col-xl-12">
             <div class="section-2__wrapper mb-55 text-center">
-               <span class="st-2">AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları</span>
-               <h4 class="section__title">Referanslar</h4>
+               <span class="st-2"><?php echo $ayarlar["strTitle"]; ?></span>
+               <h4 class="section__title"><?php echo LANG('menu_referanslar', $lang); ?></h4>
             </div>
          </div>
       </div>

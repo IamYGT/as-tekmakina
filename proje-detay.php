@@ -1,11 +1,14 @@
 <?php require("include/baglan.php"); include("include/fonksiyon.php"); include_once("inc.lang.php");
-$tekil_veri_cek = $db->query("SELECT * FROM projeler WHERE proje_durum = 1 AND proje_seo = '{$_GET["url"]}' AND dil_id = 'tr' ")->fetch(PDO::FETCH_ASSOC);
-$categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$tekil_veri_cek['kategori_id']} AND dil_id = 'tr'")->fetch(PDO::FETCH_ASSOC);
+$tekil_veri_cek = $db->query("SELECT * FROM projeler WHERE proje_durum = 1 AND proje_seo = '{$_GET["url"]}' AND dil_id = '$lang'")->fetch(PDO::FETCH_ASSOC);
+if(!$tekil_veri_cek) {
+    $tekil_veri_cek = $db->query("SELECT * FROM projeler WHERE proje_durum = 1 AND proje_seo = '{$_GET["url"]}' AND dil_id = 'tr'")->fetch(PDO::FETCH_ASSOC);
+}
+$categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$tekil_veri_cek['kategori_id']} AND dil_id = '$lang'")->fetch(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="<?php echo $lang; ?>">
    <head>
-       <title><?php echo $tekil_veri_cek["proje_baslik"]; ?>  - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları</title>
+       <title><?php echo $tekil_veri_cek["proje_baslik"]; ?>  - <?php echo $ayarlar["strTitle"]; ?></title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -18,8 +21,8 @@ $categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/projeler">Projeler</a></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/projeler"><?php echo LANG('menu_projeler', $lang); ?></a></li>
                             <li><span><?php echo $tekil_veri_cek["proje_baslik"]; ?> </span></li>
                         </ul>
                     </div>
@@ -35,9 +38,31 @@ $categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$
                <div class="col-xxl-8 col-xl-7 col-lg-7">
                   <div class="portfolio__details mb-50">
                      <div class="pt-d-image w-img mb-35">
-                        <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $tekil_veri_cek["proje_resim"]; ?>" alt="portfolio-details-img">
+                        <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $tekil_veri_cek["proje_resim"]; ?>" alt="<?php echo $tekil_veri_cek["proje_baslik"]; ?>">
                      </div>
-                     <h4 class="portfolio__details-title"><?php echo $tekil_veri_cek["proje_baslik"]; ?> </h4>
+                     <h4 class="portfolio__details-title"><?php echo $tekil_veri_cek["proje_baslik"]; ?></h4>
+                     <div class="project-details-info">
+                         <?php if($tekil_veri_cek["proje_yil"]): ?>
+                         <div class="info-item">
+                             <span class="label"><?php echo LANG('proje_yili', $lang); ?>:</span>
+                             <span class="value"><?php echo $tekil_veri_cek["proje_yil"]; ?></span>
+                         </div>
+                         <?php endif; ?>
+                         
+                         <?php if($tekil_veri_cek["proje_adres"]): ?>
+                         <div class="info-item">
+                             <span class="label"><?php echo LANG('proje_adresi', $lang); ?>:</span>
+                             <span class="value"><?php echo $tekil_veri_cek["proje_adres"]; ?></span>
+                         </div>
+                         <?php endif; ?>
+                         
+                         <?php if($tekil_veri_cek["proje_metrekare"]): ?>
+                         <div class="info-item">
+                             <span class="label"><?php echo LANG('proje_metrekare', $lang); ?>:</span>
+                             <span class="value"><?php echo $tekil_veri_cek["proje_metrekare"]; ?></span>
+                         </div>
+                         <?php endif; ?>
+                     </div>
                      <div class="ptd-descriptiopn mb-25">
                        <?php echo $tekil_veri_cek["proje_aciklama"]; ?>
                      </div>
@@ -65,7 +90,7 @@ $categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$
                   <div class="portfolio__sidebar mb-50">
                      <div class="blog-sidebar__widget mb-55">
                         <div class="blog-sidebar__widget-head mb-30">
-                           <h3 class="blog-sidebar__widget-title">Hizmetlerimiz</h3>
+                           <h3 class="blog-sidebar__widget-title"><?php echo LANG('hizmetlerimiz', $lang); ?></h3>
                         </div>
                         <div class="blog-sidebar__widget-content">
                               <ul>
@@ -79,26 +104,26 @@ $categoryInfo = $db->query("SELECT * FROM kategoriler WHERE kategori_ust_id = {$
                                  <?php
                                            }
                                          }else{
-                                           "Listelenecek veri bulunamadı.";
+                                           echo LANG('listelenecek_veri_bulunamadi', $lang);
                                          }
                                  ?>
                                </ul>
                         </div>
                      </div>
                      <div class="ps__form mb-40">
-                        <h5 class="ps__title">Teklif Formu</h5>
+                        <h5 class="ps__title"><?php echo LANG('teklif_formu', $lang); ?></h5>
                         <form action="#">
                            <div class="contact-filed mb-20">
-                               <input type="text" name="name" placeholder="İsminiz">
+                               <input type="text" name="name" placeholder="<?php echo LANG('isminiz', $lang); ?>">
                            </div>
                            <div class="contact-filed contact-icon-mail mb-20">
-                               <input type="text" name="email" placeholder="Eposta Adresiniz">
+                               <input type="text" name="email" placeholder="<?php echo LANG('eposta_adresiniz', $lang); ?>">
                            </div>
                            <div class="contact-filed contact-icon-message mb-20">
-                              <textarea placeholder="Mesajınız"></textarea>
+                              <textarea placeholder="<?php echo LANG('mesajiniz', $lang); ?>"></textarea>
                           </div>
                            <div class="form-submit text-center">
-                               <button class="tp-btn w-100">Gönder</button>
+                               <button class="tp-btn w-100"><?php echo LANG('gonder', $lang); ?></button>
                            </div>
                        </form>
                      </div>

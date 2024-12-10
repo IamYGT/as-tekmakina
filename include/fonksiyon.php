@@ -123,7 +123,7 @@ include_once("Mobile_Detect.php");
 			 'Ş' => 'S', 'İ' => 'I', 'Ç' => 'C', 'Ü' => 'U', 'Ö' => 'O', 'Ğ' => 'G',
 			 'ş' => 's', 'ı' => 'i', 'ç' => 'c', 'ü' => 'u', 'ö' => 'o', 'ğ' => 'g',
 			 // Russian
-			 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', '����' => 'Zh',
+			 'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E', 'Ё' => 'Yo', '��������' => 'Zh',
 			 'З' => 'Z', 'И' => 'I', 'Й' => 'J', 'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O',
 			 'П' => 'P', 'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
 			 'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sh', 'Ъ' => '', 'Ы' => 'Y', 'Ь' => '', 'Э' => 'E', 'Ю' => 'Yu',
@@ -367,12 +367,30 @@ include_once("Mobile_Detect.php");
 			$data = strip_tags($data);  
 		return $data;
 	}
-	function LANG($anahtar, $lang) {
+	function LANG($anahtar, $dil_kodu = null) {
 		try {
-			$db = checkDB();
-			$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ?");
-			$query->execute([$anahtar, $lang]);
+			global $db;
+			if (!$dil_kodu) {
+				$dil_kodu = getCurrentDil();
+			}
+			
+			// Debug için
+			error_log("LANG function called with key: " . $anahtar . " and language: " . $dil_kodu);
+			
+			if ($db === null) {
+				error_log("Database connection is null");
+				return $anahtar;
+			}
+			
+			$query = $db->prepare("SELECT deger FROM dil_kelimeler WHERE anahtar = ? AND kod = ? LIMIT 1");
+			$query->execute([$anahtar, $dil_kodu]);
 			$result = $query->fetch(PDO::FETCH_ASSOC);
+			
+			// Debug için
+			if (!$result) {
+				error_log("Translation not found for key: " . $anahtar . " in language: " . $dil_kodu);
+			}
+			
 			return $result ? $result["deger"] : $anahtar;
 		} catch (Exception $e) {
 			error_log("LANG hatası: " . $e->getMessage());
@@ -454,9 +472,8 @@ include_once("Mobile_Detect.php");
 	}
 
 	function getCurrentDil() {
-		global $cookie_adi;
-		$varsayilan = getVarsayilanDil();
-		return isset($_COOKIE[$cookie_adi]) ? $_COOKIE[$cookie_adi] : $varsayilan['dil_kod'];
+		global $cookie_adi, $varsayilanDil;
+		return isset($_COOKIE[$cookie_adi]) ? $_COOKIE[$cookie_adi] : $varsayilanDil;
 	}
 
 	function getDilById($dil_kod) {

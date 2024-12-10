@@ -1,27 +1,27 @@
       <footer>
-         <div class="footer-area black-bg-2 pt-100 fix">
+         <div class="footer-area pt-100 fix" style="background-color: #040404;">
             <div class="container">
                <div class="row">
                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                      <div class="footer__widget mb-40">
-                        <h5 class="footer__widget-title">Hızlı Menü</h5>
+                        <h5 class="footer__widget-title"><?php echo LANG('footer_hizli_menu', $lang); ?></h5>
                         <div class="footer__widget-content">
                            <div class="footer__links">
                               <ul>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/#">Hakkımızda</a></li>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/referanslar">Referanslar</a></li>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/projeler">Projeler</a></li>
-                                 <li><a href="<?php echo $ayarlar["strURL"]; ?>/haberler">Haberler</a></li>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/iletisim">İletişim</a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/index"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/#"><?php echo LANG('menu_hakkimizda', $lang); ?></a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/referanslar"><?php echo LANG('menu_referanslar', $lang); ?></a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/projeler"><?php echo LANG('menu_projeler', $lang); ?></a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/haberler"><?php echo LANG('menu_haberler', $lang); ?></a></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/iletisim"><?php echo LANG('menu_iletisim', $lang); ?></a></li>
                               </ul>
-                        </div>
+                           </div>
                         </div>
                      </div>
                   </div>
                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                      <div class="footer__widget mb-40">
-                        <h5 class="footer__widget-title">Kurumsal</h5>
+                        <h5 class="footer__widget-title"><?php echo LANG('footer_kurumsal', $lang); ?></h5>
                         <div class="footer__widget-content">
                            <div class="footer__links">
                               <ul>
@@ -43,7 +43,7 @@
                   </div>
                   <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6">
                      <div class="footer__widget mb-40">
-                        <h5 class="footer__widget-title">Hizmetlerimiz</h5>
+                        <h5 class="footer__widget-title"><?php echo LANG('footer_hizmetlerimiz', $lang); ?></h5>
                         <div class="footer__widget-content">
                            <div class="footer__links">
                               <ul>
@@ -65,7 +65,9 @@
                      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4">
                         <div class="footer__widget mb-40">
                            <div class="footer__logo">
-                              <a href="<?php echo $ayarlar["strURL"]; ?>/index"><img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/logo-white.png" alt="Astek Makina"></a>
+                              <a href="<?php echo $ayarlar["strURL"]; ?>/index">
+                                <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/logo_pumada.png" alt="Pumada">
+                              </a>
                            </div>
                         </div>
                      </div>
@@ -74,12 +76,12 @@
                   <div class="row">
                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <div class="footer__copyright-text">
-                           <p>Copyright © <a href="https://www.as-tekmakina.com.tr" rel="dofollow">As-tek Makina </a> her Hakkı Saklıdır</p>
+                           <p>Copyright © <a href="https://www.pumada.me" rel="dofollow">PUMADA GROUP DOO </a> <?php echo LANG('footer_copyright', $lang); ?></p>
                         </div>
                      </div>
                      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                         <div class="footer__copyright-links text-sm-end">
-                          <p>Tasarım & Kodlama <a href="https://www.memsidea.com" rel="dofollow">Memsidea</a> </p>
+                          <p><?php echo LANG('footer_tasarim', $lang); ?> <a href="https://www.memsidea.com" rel="dofollow">Memsidea</a></p>
                          </div>
                      </div>
                   </div>

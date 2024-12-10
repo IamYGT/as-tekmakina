@@ -1,5 +1,5 @@
 <?php require("../include/baglan.php");include("../include/fonksiyon.php");
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
+		if(!isset($_SESSION['LOGIN'])) {
 			go("index.php",0);
 			exit();
 		}
@@ -81,7 +81,17 @@
 									</thead>
 									<tbody id="sortable">
 <?php
-									$list = $db->query("SELECT * FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ORDER BY row ASC LIMIT $baslangic,$limit");
+									$list = $db->query("SELECT k.*, 
+    GROUP_CONCAT(DISTINCT k2.dil_id) as diller,
+    GROUP_CONCAT(DISTINCT k2.haber_baslik ORDER BY k2.dil_id SEPARATOR '|||') as basliklar
+    FROM ".TABLE." k 
+    LEFT JOIN ".TABLE." k2 ON k.haber_ust_id = k2.haber_ust_id 
+    WHERE k.dil_id = 'tr'
+    GROUP BY k.haber_ust_id 
+    ORDER BY k.row ASC, k.haber_id DESC 
+    LIMIT $baslangic,$limit");
+
+error_log("Kurumsal admin sorgusu sonucu: " . $list->rowCount() . " kayıt bulundu");
 										if ($list->rowCount()){
 											foreach($list as $row){
 ?>
@@ -312,44 +322,94 @@
 					if(isset($submitControl)){
 						if(!empty($_POST['haber_baslik']) || !empty($_POST['haber_aciklama'])) {
 							$image_info = $db->query("SELECT * FROM ".TABLE." WHERE haber_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
-
-								$upload = new Upload($_FILES['haber_resim']);
-								if(!isset($_FILES['haber_resim']['name'])) {
-									$haber_resim = null;
-								} else if(!empty($_FILES['haber_resim']['name'])) {
-									$upload->file_auto_rename = true;
-									$upload->process("../uploads/haberler");
-									if ($upload->processed) {
-										$haber_resim = $upload->file_dst_name;
-									} else {
-										$haber_resim = null;
-									}
+							
+							$upload = new Upload($_FILES['haber_resim']);
+							if(!isset($_FILES['haber_resim']['name'])) {
+								$haber_resim = null;
+							} else if(!empty($_FILES['haber_resim']['name'])) {
+								$upload->file_auto_rename = true;
+								$upload->process("../uploads/haberler");
+								if ($upload->processed) {
+									$haber_resim = $upload->file_dst_name;
 								} else {
-									$haber_resim = $image_info["haber_resim"];
+									$haber_resim = null;
 								}
-
-
-
+							} else {
+								$haber_resim = $image_info["haber_resim"];
+							}
 
 							foreach ($_POST AS $k=>$v) {
-								$v = $v;
 								if (substr($k,0,5) == "form_") {
 									$key = str_replace("form_","",$k);
-
-									$update = $db->prepare("UPDATE ".TABLE." SET  haber_baslik = ?, haber_seo = ?, haber_aciklama = ?, haber_description = ?,   haber_kisaaciklama = ?,    haber_kalite = ?,     haber_yillik = ?,   haber_resim = ?,  haber_durum = ? WHERE haber_ust_id = ? AND dil_id = ?");
-									$update->execute(array($haber_baslik[$key], Seo_Link_Cevir($haber_baslik[$key]), $haber_aciklama[$key],  $haber_description[$key],    $haber_kisaaciklama[$key],  $haber_kalite[$key],  $haber_yillik[$key],  $haber_resim,   $haber_durum, $id, $key));
+									
+									$check = $db->prepare("SELECT * FROM ".TABLE." WHERE haber_ust_id = ? AND dil_id = ?");
+									$check->execute([$id, $key]);
+									
+									if($check->rowCount() > 0) {
+										$update = $db->prepare("UPDATE ".TABLE." SET 
+											haber_baslik = ?,
+											haber_seo = ?,
+											haber_aciklama = ?,
+											haber_description = ?,
+											haber_kisaaciklama = ?,
+											haber_kalite = ?,
+											haber_yillik = ?,
+											haber_resim = ?,
+											haber_durum = ?
+											WHERE haber_ust_id = ? AND dil_id = ?");
+											
+										$update->execute([
+											$haber_baslik[$key],
+											Seo_Link_Cevir($haber_baslik[$key]),
+											$haber_aciklama[$key],
+											$haber_description[$key],
+											$haber_kisaaciklama[$key],
+											$haber_kalite[$key],
+											$haber_yillik[$key],
+											$haber_resim,
+											$haber_durum,
+											$id,
+											$key
+										]);
+									} else {
+										$insert = $db->prepare("INSERT INTO ".TABLE." SET 
+											haber_baslik = ?,
+											haber_seo = ?,
+											haber_aciklama = ?,
+											haber_description = ?,
+											haber_kisaaciklama = ?,
+											haber_kalite = ?,
+											haber_yillik = ?,
+											haber_resim = ?,
+											dil_id = ?,
+											haber_durum = ?,
+											haber_ust_id = ?");
+											
+										$insert->execute([
+											$haber_baslik[$key],
+											Seo_Link_Cevir($haber_baslik[$key]),
+											$haber_aciklama[$key],
+											$haber_description[$key],
+											$haber_kisaaciklama[$key],
+											$haber_kalite[$key],
+											$haber_yillik[$key],
+											$haber_resim,
+											$key,
+											$haber_durum,
+											$id
+										]);
+									}
 								}
 							}
-							if ($update) {
-								echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
-								$error = Bilgilendirme::Basarili("Başarılı şekilde Eklendi, görüntülemek üzere yönlendiriliyorsunuz..");
-							}else {
-								$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");
-							}
-						}else{
-							$error = Bilgilendirme::Hata("Hoppala! Boş alan bıraktınız.");
+							
+							echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$id.'">';
+							$error = Bilgilendirme::Basarili("Başarılı şekilde güncellendi");
+							
+						} else {
+							$error = Bilgilendirme::Hata("Boş alan bıraktınız");
 						}
-					} else {
+					}
+					
 					$row_info = $db->query("SELECT * FROM ".TABLE." WHERE haber_ust_id = {$id}")->fetch(PDO::FETCH_ASSOC);
 ?>
 
@@ -490,25 +550,8 @@
                     </div>
 				</form>
 <?php
-					}
-
-?>
-<?php
 				} else {
-					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı.");
-				}
-?>
-<?php
-			}else if($_GET["do"] == 'delete') {
-				$row_check = $db->prepare("SELECT * FROM ".TABLE." WHERE haber_ust_id = ?");
-				$row_check->execute(array($id));
-				if ($row_check->rowCount() > 0) {
-					$update = $db->exec("DELETE FROM ".TABLE." WHERE haber_ust_id = {$id};");
-					if($update) {
-						echo '<meta http-equiv="refresh" content="1;url='.AREA.'">';
- 					}else{
-						$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");
-					}
+					$error = Bilgilendirme::Hata("Belirlenen veri bulunamadı");
 				}
 			}
 ?>

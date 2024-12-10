@@ -7,9 +7,9 @@ $baslangic = ($sayfa-1)*$limit;
 
 ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="<?php echo $lang; ?>">
    <head>
-       <title>Haberler - AS-TEK Makina Teçhizat Kimya ve Laboratuvar Ekipmanları </title>
+       <title><?php echo LANG('menu_haberler', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
        <?php include 'css.php'; ?>
     </head>
    <body>
@@ -22,11 +22,11 @@ $baslangic = ($sayfa-1)*$limit;
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/index">Anasayfa</a></li>
-                            <li><span>Haberler</span></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><span><?php echo LANG('menu_haberler', $lang); ?></span></li>
                         </ul>
                     </div>
-                     <h3 class="page__title mt-20">Haberler</h3>
+                     <h3 class="page__title mt-20"><?php echo LANG('menu_haberler', $lang); ?></h3>
                   </div>
                </div>
             </div>
@@ -39,30 +39,54 @@ $baslangic = ($sayfa-1)*$limit;
          <div class="col-lg-12">
            <div class="row">
              <?php
-             		$list = $db->query("SELECT * FROM haberler WHERE  dil_id = 'tr' ORDER BY haber_ust_id DESC LIMIT $baslangic,$limit");
-             			if ($list->rowCount()){
-             				foreach($list as $row){
+             		$veri_cek = $db->query("SELECT * FROM haberler 
+                        WHERE haber_durum = 1 
+                        AND dil_id = '$lang' 
+                        ORDER BY haber_ust_id DESC 
+                        LIMIT $baslangic,$limit");
+
+             	error_log("Haberler sorgusu - Dil: $lang, Sonuç: " . $veri_cek->rowCount());
+
+             	if ($veri_cek->rowCount()) {
+             		foreach($veri_cek as $row) {
              ?>
                <div style="padding: 30px;" class="tp-blog mb-30 col-lg-6 col-12">
                   <div class="tp-blog__thumb m-img mb-15">
-                     <a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>"><img src="<?php echo $ayarlar["strURL"]; ?>/uploads/haberler/<?php echo $row["haber_resim"]; ?>" alt="<?php echo $row["haber_baslik"]; ?>"></a>
+                     <?php if($row["haber_resim"]) { ?>
+                        <a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>">
+                           <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/haberler/<?php echo $row["haber_resim"]; ?>" 
+                                alt="<?php echo $row["haber_baslik"]; ?>">
+                        </a>
+                     <?php } ?>
                   </div>
                   <div class="tp-blog__content">
                      <div style="margin-bottom: 12px;" class="tp-blog__meta mb-15">
-                        <span><a href="#"><i class="fal fa-clock"></i> <?php echo date("d/m/Y", strtotime($row["haber_tarih"])); ?> </a></span>
-                        <span><a href="#"><i class="far fa-user"></i> As-Tek Makina</a></span>
+                        <span>
+                           <a href="#"><i class="fal fa-clock"></i> <?php echo date("d/m/Y", strtotime($row["haber_tarih"])); ?></a>
+                        </span>
+                        <span>
+                           <a href="#"><i class="far fa-user"></i> <?php echo $ayarlar["strTitle"]; ?></a>
+                        </span>
                       </div>
-                     <h3 class="tp-blog__title mb-15"><a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>"><?php echo $row["haber_baslik"]; ?></a></h3>
-                     <p><?php echo $row["haber_kisaaciklama"]; ?></p>
+                     <h3 class="tp-blog__title mb-15">
+                        <a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>">
+                           <?php echo $row["haber_baslik"]; ?>
+                        </a>
+                     </h3>
+                     <?php if($row["haber_kisaaciklama"]) { ?>
+                        <p><?php echo $row["haber_kisaaciklama"]; ?></p>
+                     <?php } ?>
                      <div class="tp-blog-btn mt-25">
-                        <a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>" class="tp-btn">Devamını Oku</a>
+                        <a href="<?php echo $ayarlar["strURL"]; ?>/haber/<?php echo $row["haber_seo"]; ?>" class="tp-btn">
+                           <?php echo LANG('devamini_oku', $lang); ?>
+                        </a>
                      </div>
                   </div>
                </div>
                <?php
                        }
-                     }else{
-                       echo 'Listelenecek veri bulunamadı.';
+                     } else {
+                       echo '<div class="col-12 text-center">' . LANG('listelenecek_veri_bulunamadi', $lang) . '</div>';
                      }
                ?>
              </div>
@@ -76,7 +100,7 @@ $baslangic = ($sayfa-1)*$limit;
                          $x = 2;
                          if($sayfa > 1){
                            $onceki = $sayfa-1;
-                           echo '<li><a href="?q='.$onceki.'"> <i class="far fa-angle-left"></i> </a> </li>';
+                            echo '<li><a href="?q='.$onceki.'"> <i class="far fa-angle-left"></i> </a> </li>';
                          }
                          if($sayfa==1){
                            echo '<li> <span class="current">1</span></li>';
