@@ -3,7 +3,7 @@ require_once(__DIR__ . '/error_handler.php');
 include_once("class.upload.php");
 include_once("Mobile_Detect.php");
 
-	@session_start();
+
 	@ob_start();  
 
 	function cURL($url){ 

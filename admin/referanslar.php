@@ -1,5 +1,5 @@
 ﻿<?php require("../include/baglan.php");include("../include/fonksiyon.php"); 
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
+		if(!isset($_SESSION['LOGIN'])) {
 			go("index.php",0);  
 			exit();
 		}

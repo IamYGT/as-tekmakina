@@ -28,7 +28,7 @@
        <section class="contact__area pt-120 pb-80" data-background="<?php echo $ayarlar["strURL"]; ?>/assets/img/bg/contact-bg.png">
          <div class="container">
             <div class="row">
-               <div class="col-lg-3 col-md-6">
+               <div class="col-lg-4 col-md-6">
                   <div class="contact__item text-center mb-30">
                      <div class="contact__icon mb-35">
                         <i class="fal fa-envelope-open-text"></i>
@@ -40,7 +40,7 @@
 
                   </div>
                </div>
-               <div class="col-lg-3 col-md-6">
+               <div class="col-lg-4 col-md-6">
                   <div class="contact__item text-center mb-30">
                      <div class="contact__icon mb-35">
                         <i class="fa-light fa-phone"></i>
@@ -53,7 +53,7 @@
 
                   </div>
                </div>
-               <div class="col-lg-3 col-md-6">
+               <div class="col-lg-4 col-md-6">
                   <div class="contact__item text-center mb-30">
                      <div class="contact__icon mb-35">
                         <i class="fa-light fa-map-location-dot"></i>
@@ -65,20 +65,7 @@
 
                   </div>
                </div>
-               <div class="col-lg-3 col-md-6">
-                  <div class="contact__item text-center mb-30">
-                     <div class="contact__icon mb-35">
-                        <i class="fa-light fa-bullseye-arrow"></i>
-                     </div>
-                     <h5 class="contact__title mb-25"><?php echo LANG('sosyal_medya', $lang); ?></h5>
-                     <div class="contact__social mt-30">
-                        <a href="<?php echo $ayarlar["strFacebook"]; ?>"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="<?php echo $ayarlar["strTwitter"]; ?>"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="<?php echo $ayarlar["strInstagram"]; ?>"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="<?php echo $ayarlar["strYoutube"]; ?>"><i class="fa-brands fa-youtube"></i></a>
-                     </div>
-                  </div>
-               </div>
+              
             </div>
          </div>
       </section>
@@ -141,7 +128,7 @@
       <!-- contact__map start -->
       <section class="contact__map">
          <div class="contact__map-wrap">
-             <iframe id="gmap_canvas" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3187.3862978185!2d35.26088911529485!3d36.97671137991262!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x1ab7b66568e5687e!2zMzbCsDU4JzM2LjIiTiAzNcKwMTUnNDcuMSJF!5e0!3m2!1str!2str!4v1655891541953!5m2!1str!2str"></iframe>
+             <iframe id="gmap_canvas" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8078.367037961231!2d19.10163265917346!3d42.53776620789054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x134dbfd3aedc8d2d%3A0x84b26f218179fe2!2sPumada%20Group!5e0!3m2!1str!2str!4v1733806900740!5m2!1str!2str" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
               <div class="contact__map-icon">
                   <i class="fa-solid fa-location-dot"></i>
                   <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/bg/contact-icon-bg.png" alt="">

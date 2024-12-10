@@ -1,16 +1,16 @@
 ﻿<?php require("../include/baglan.php");include("../include/fonksiyon.php"); 
-		if(!isset($_SESSION['LOGIN']) && !in_array(array('login'))) {
-			go("index.php",0);  
-			exit();
-		}
-		define('TABLE',"galeriler");
-		define('AREA',"galeriler");
-		if(!isset($do)) $do = null; 
-		$sayfa = (isset($q) ? $q : 1);
-		$toplam_veri_sayisi = $db->query("SELECT COUNT(*) FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ")->fetchColumn();
-		$limit = 10;
-		$sonSayfa = ceil($toplam_veri_sayisi/$limit);
-		$baslangic = ($sayfa-1)*$limit;
+if(!isset($_SESSION['LOGIN'])) {
+    go("index.php",0);  
+    exit();
+}
+define('TABLE',"galeriler");
+define('AREA',"galeriler");
+if(!isset($do)) $do = null; 
+$sayfa = (isset($q) ? $q : 1);
+$toplam_veri_sayisi = $db->query("SELECT COUNT(*) FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ")->fetchColumn();
+$limit = 10;
+$sonSayfa = ceil($toplam_veri_sayisi/$limit);
+$baslangic = ($sayfa-1)*$limit;
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -150,148 +150,120 @@
 					</div> 
 <?php 
 			} else if($do == 'add') {
-				if(isset($submitControl)){
-					if(!empty($_POST['galeri_baslik']) || !empty($_POST['galeri_aciklama'])) {
+				if(isset($submitControl)) {
+					if(!empty($_POST['galeri_baslik'])) {
 						$LastID = $db->query("SELECT galeri_id FROM ".TABLE." ORDER BY galeri_id DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
 						$LastID = $LastID["galeri_id"]+1;
+						
 						$upload = new Upload($_FILES['galeri_resim']);
-						if ($upload->uploaded) { 
-								$upload->file_auto_rename = true;
-								$upload->process("../uploads/gallery");
-							if ($upload->processed){  
+						if ($upload->uploaded) {
+							$upload->file_new_name_body = 'galeri_'.$LastID;
+							$upload->image_resize = true;
+							$upload->image_ratio_crop = true;
+							$upload->image_x = 800;
+							$upload->image_y = 600;
+							$upload->allowed = array('image/*');
+							$upload->process("../uploads/gallery");
+							if ($upload->processed) {
 								$galeri_resim = $upload->file_dst_name;
-							} else { 
-								$error = Bilgilendirme::Hata("Hay Aksi! Bir hata meydana geldi.".$upload->error);
 							}
 						}
+						
 						foreach ($_POST AS $k=>$v) {
-							$v = $v;
+							${$k} = $v;
 							if (substr($k,0,5) == "form_") {
 								$key = str_replace("form_","",$k);
 								$insert = $db->prepare("INSERT INTO ".TABLE." SET galeri_baslik = ?, galeri_seo = ?, galeri_aciklama = ?, galeri_resim = ?, dil_id = ?, galeri_durum = ?, galeri_ust_id = ?");
 								$insert->execute(array($galeri_baslik[$key], Seo_Link_Cevir($galeri_baslik[$key]), $galeri_aciklama[$key], $galeri_resim, $key, $galeri_durum, $LastID));
-								$last_id = $db->lastInsertId();
 							}
 						}
+						
 						if ($insert) {
 							echo '<meta http-equiv="refresh" content="1;url='.AREA.'?do=edit&id='.$LastID.'">';
-							$error = Bilgilendirme::Basarili("Başarılı şekilde Eklendi, görüntülemek üzere yönlendiriliyorsunuz..");   	
-						}else {
-							$error = Bilgilendirme::Hata("Bir Hata meydana geldi, daha sonra tekrar deneyiniz.");  
+							//go(AREA."?do=edit&id=".$LastID,1);
 						}
-					}else{  
-						$error = Bilgilendirme::Hata("Hoppala! Boş alan bıraktınız."); 
 					}
-				} else {
+				}
 ?>
-				<form action="#" method="POST" enctype="multipart/form-data" id="form" style="display: inline-flex; "> 
-					<div class="col-xl-8 col-xxl-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Galeri Ekle</h4>
-                            </div>
-                            <div class="card-body"> 
-								<div class="step-app" id="demo">
-									<ul class="step-steps">
-<?php
-							$list = $db->query("select * from dil where dil_durum = '1'"); 
-								foreach ($list AS $row) {
-									$LANGUAGE_ID = $row["dil_id"]; 
-									$LANGUAGE_CODE = $row["dil_kod"]; 
-									$LANGUAGE_TITLE = $row["dil_baslik"];   
-?>
-									  <li data-step-target="step<?php echo $LANGUAGE_ID; ?>"><?php echo $LANGUAGE_TITLE; ?></li>
-<?php 
-								}
-?>
-									</ul>
-									<div class="step-content">
-<?php
-										$list = $db->query("select * from dil where dil_durum = '1'"); 
-											foreach ($list AS $row) {
-												$LANGUAGE_ID = $row["dil_id"]; 
-												$LANGUAGE_CODE = $row["dil_kod"]; 
-												$LANGUAGE_TITLE = $row["dil_baslik"];   
-?> 
-												<div class="step-tab-panel" data-step="step<?php echo $LANGUAGE_ID; ?>">
-													<div class="row">
-														<div class="col-lg-12 mb-2">
-															<div class="form-group">
-																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Title</label>
-																<input type="text" name="galeri_baslik[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Title" required="">
-															</div>
-														</div>  
-														<div class="col-lg-12 mb-2">
-															<div class="form-group">
-																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Description</label>
-																<input type="text" name="galeri_description[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Description" required="">
-															</div>
-														</div>
-														<div class="col-lg-12 mb-2">
-															<div class="form-group">
-																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Keywords</label>
-																<input type="text" name="galeri_keywords[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Keywords" required="">
-															</div>
-														</div>
-														<div class="col-lg-12 mb-2">
-															<div class="form-group">
-																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Açıklama</label>
-																<textarea class="form-control ckeditor" name="galeri_aciklama[<?php echo $LANGUAGE_CODE; ?>]"></textarea>
-															</div>
-														</div>
-													</div>
-													<input type="hidden" name="form_<?php echo $LANGUAGE_CODE; ?>" value="<?php echo $LANGUAGE_CODE; ?>" />
-												</div>
-<?php 
+				<!-- Ekleme Formu -->
+				<form action="" method="post" enctype="multipart/form-data" id="form">
+					<div class="col-xl-12">
+						<div class="card">
+							<div class="card-header">
+								<h4 class="card-title">Yeni Galeri Ekle</h4>
+							</div>
+							<div class="card-body">
+								<!-- Tab Nav -->
+								<div class="nav-tabs-custom">
+									<ul class="nav nav-tabs" role="tablist">
+										<?php
+											$diller = $db->query("SELECT * FROM dil WHERE dil_durum = '1'");
+											foreach ($diller as $d) {
+												echo '<li class="nav-item">
+														<a class="nav-link '.($d["dil_kod"] == "tr" ? 'active' : '').'" data-bs-toggle="tab" href="#'.$d["dil_kod"].'" role="tab">
+															<span><img src="'.$d["dil_flag"].'" width="20"></span>
+														</a>
+													  </li>';
 											}
-?>
-									</div>
-									    <div class="step-footer pull-right">
-											<button data-step-action="prev" class="step-btn1 btn btn-rounded btn-light">Geri</button>
-											<button data-step-action="next" class="step-btn1 btn btn-rounded btn-primary">İleri</button>
-											<button data-step-action="finish" class="step-btn1 btn btn-rounded btn-danger" type="submit">Kaydet</button>
-											<input type="hidden" name="submitControl" value="1" />
+										?>
+									</ul>
+									<div class="tab-content">
+										<?php
+											foreach ($diller as $d) {
+										?>
+											<div class="tab-pane <?php echo ($d["dil_kod"] == "tr" ? 'active' : ''); ?>" id="<?php echo $d["dil_kod"]; ?>" role="tabpanel">
+												<input type="hidden" name="form_<?php echo $d["dil_kod"]; ?>" value="<?php echo $d["dil_kod"]; ?>">
+												<div class="form-group">
+													<label>Galeri Başlığı</label>
+													<input type="text" class="form-control" name="galeri_baslik[<?php echo $d["dil_kod"]; ?>]">
+												</div>
+												<div class="form-group">
+													<label>Galeri Açıklaması</label>
+													<textarea class="form-control" name="galeri_aciklama[<?php echo $d["dil_kod"]; ?>]"></textarea>
+												</div>
+											</div>
+										<?php } ?>
+										
+										<!-- Ortak Alanlar -->
+										<div class="form-group">
+											<label>Galeri Resmi</label>
+											<div class="fileinput fileinput-new" data-provides="fileinput">
+												<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+												<div>
+													<span class="btn btn-primary btn-file">
+														<span class="fileinput-new">Resim Seç</span>
+														<span class="fileinput-exists">Değiştir</span>
+														<input type="file" name="galeri_resim">
+													</span>
+													<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Sil</a>
+												</div>
+											</div>
 										</div>
+										<div class="form-group">
+											<label>Yayın Durumu</label>
+											<select name="galeri_durum" class="form-control">
+												<option value="1">Aktif</option>
+												<option value="2">Pasif</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Galeri Tipi</label>
+											<select name="galeri_tip" class="form-control">
+												<option value="galeri" <?php echo ($row_info["galeri_tip"] == "galeri" ? 'selected' : ''); ?>>Galeri</option>
+												<option value="referans" <?php echo ($row_info["galeri_tip"] == "referans" ? 'selected' : ''); ?>>Referans</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<button type="submit" class="btn btn-primary" name="submitControl">Kaydet</button>
+										</div>
+									</div>
 								</div>
-                            </div>
-                        </div>
-                    </div>
-					<div class="col-xl-4 col-xxl-4">
-                        <div class="card">
-                            <div class="card-body p-3"> 
-								<div class="form-group"> 
-									<label for="">Resim</label>
-									<small class="form-text text-muted">Seçmiş olduğunuz resim veri içeriğinde kullanılmaktadır.</small> 
-									<div class="fileinput fileinput-new" data-provides="fileinput">
-										<div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 100%;height: 190px;line-height: 190px;">
-											<img src="https://via.placeholder.com/287x192.png?text=Select+Image" class="img-fluid img-thumbnail" alt="">
-										</div> 
-										<div>
-											<span class="btn btn-primary btn-sm btn-file">
-												<span class="fileinput-new"><span class="fui-image"></span>Resim Seç</span>
-												<span class="fileinput-exists"><span class="fui-gear"></span>Değiştir</span>
-												<input type="file" name="galeri_resim" accept="image/*" id="galeri_resim">
-											</span>
-											<a href="#" class="btn btn-primary btn-sm fileinput-exists" data-dismiss="fileinput"><span class="fui-trash"></span>Vazgeç</a>
-										</div>
-									</div>
-								</div> 	
-								<div class="form-group"> 
-									<label for="">Yayın Durumu</label>
-									<select name="galeri_durum" class="form-control">
-										<option value="1">Aktif</option>
-										<option value="2">Pasif</option> 
-									</select>
-								</div> 
-                            </div>
-                        </div>
-                    </div>
+							</div>
+						</div>
+					</div>
 				</form>
 <?php 
-				}
-?> 
-<?php 
-			}else if($do == 'edit') {
+			} else if($do == 'edit') {
 				$row_check = $db->prepare("SELECT * FROM ".TABLE." WHERE galeri_ust_id = ?");
 				$row_check->execute(array($id)); 
 				if ($row_check->rowCount() > 0) {

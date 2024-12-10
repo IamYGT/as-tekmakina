@@ -49,6 +49,286 @@ $dil_karsiliklari = $db->query("SELECT k.haber_seo, k.dil_id, d.dil_kod, d.dil_b
                  href="<?php echo $ayarlar["strURL"]; ?>/kurumsal/<?php echo $dk["haber_seo"]; ?>" />
        <?php } ?>
        <?php include 'css.php'; ?>
+       <style>
+       /* Genel Stiller */
+       :root {
+           --primary-color: #da963e;
+           --secondary-color: #040404;
+           --heading-color: #040404;
+       }
+
+       /* About Bölümü */
+       .about-image-grid {
+           position: relative;
+           margin-bottom: 30px;
+       }
+
+       .about-image-grid .main-image {
+           border-radius: 15px;
+           overflow: hidden;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+       }
+
+       .experience-box {
+           position: absolute;
+           bottom: 30px;
+           right: 30px;
+           background: var(--primary-color);
+           color: #fff;
+           padding: 25px 35px;
+           border-radius: 15px;
+           text-align: center;
+           box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+       }
+
+       .year-count .count {
+           font-size: 48px;
+           font-weight: 700;
+           line-height: 1;
+           margin-bottom: 5px;
+           display: block;
+           color: #fff;
+       }
+
+       .year-count p {
+           margin: 0;
+           font-size: 16px;
+           opacity: 0.9;
+       }
+
+       /* Misyon Vizyon Kalite Kartları */
+       .mission-vision {
+           background-color: #f8f9fa;
+           padding: 80px 0;
+       }
+
+       .card {
+           border: none;
+           border-radius: 15px;
+           box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+           transition: all 0.3s ease;
+           height: 100%;
+       }
+
+       .card:hover {
+           transform: translateY(-10px);
+           box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+       }
+
+       .card-body {
+           padding: 2rem;
+       }
+
+       .icon-box {
+           color: var(--primary-color);
+           margin-bottom: 1.5rem;
+       }
+
+       .card-title {
+           color: var(--secondary-color);
+           font-size: 24px;
+           margin-bottom: 1rem;
+           font-weight: 600;
+       }
+
+       .card-text {
+           color: #666;
+           line-height: 1.6;
+       }
+
+       /* Hizmetler Bölümü */
+       .services-section {
+           padding: 80px 0;
+           background: #fff;
+       }
+
+       .section-title {
+           margin-bottom: 50px;
+           text-align: center;
+       }
+
+       .section-title h2 {
+           color: var(--secondary-color);
+           font-size: 36px;
+           font-weight: 700;
+           margin-bottom: 20px;
+       }
+
+       .divider {
+           width: 80px;
+           height: 4px;
+           background: var(--primary-color);
+           margin: 15px auto;
+           border-radius: 2px;
+       }
+
+       .service-card {
+           border: none;
+           border-radius: 15px;
+           overflow: hidden;
+           box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+           transition: all 0.3s ease;
+           height: 100%;
+       }
+
+       .service-card:hover {
+           transform: translateY(-10px);
+           box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+       }
+
+       .service-img {
+           position: relative;
+           overflow: hidden;
+       }
+
+       .service-img img {
+           transition: all 0.5s ease;
+       }
+
+       .service-card:hover .service-img img {
+           transform: scale(1.1);
+       }
+
+       .service-content {
+           padding: 25px;
+           background: #fff;
+       }
+
+       .service-content h4 {
+           font-size: 20px;
+           margin-bottom: 15px;
+       }
+
+       .service-content h4 a {
+           color: var(--secondary-color);
+           text-decoration: none;
+           transition: color 0.3s ease;
+       }
+
+       .service-content h4 a:hover {
+           color: var(--primary-color);
+       }
+
+       .service-content p {
+           color: #666;
+           margin: 0;
+           line-height: 1.6;
+       }
+
+       /* About Content Bölümü */
+       .about-content {
+           padding: 20px;
+       }
+
+       .about-content .title {
+           font-size: 36px;
+           color: var(--secondary-color);
+           font-weight: 700;
+           margin-bottom: 20px;
+       }
+
+       .about-text {
+           color: #666;
+           line-height: 1.8;
+           font-size: 16px;
+       }
+
+       /* Responsive Düzenlemeler */
+       @media (max-width: 991px) {
+           .experience-box {
+               position: relative;
+               bottom: auto;
+               right: auto;
+               margin-top: 20px;
+               display: inline-block;
+           }
+           
+           .section-title h2 {
+               font-size: 30px;
+           }
+           
+           .card-title {
+               font-size: 20px;
+           }
+       }
+
+       @media (max-width: 767px) {
+           .about-content .title {
+               font-size: 28px;
+           }
+           
+           .service-content h4 {
+               font-size: 18px;
+           }
+           
+           .experience-box {
+               width: 100%;
+               text-align: center;
+           }
+       }
+
+       /* Hero bölümü için arka plan */
+       .page__title-area {
+           background-image: url('/admin/images/image.jpg') !important;
+           background-size: cover;
+           background-position: center;
+           position: relative;
+       }
+
+       .page__title-area::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background: rgba(4, 4, 4, 0.6); /* var(--secondary-color) with opacity */
+       }
+
+       /* Diğer renk güncellemeleri */
+       .card-title {
+           color: var(--secondary-color);
+       }
+
+       .section-title h2 {
+           color: var(--secondary-color);
+       }
+
+       .about-content .title {
+           color: var(--secondary-color);
+       }
+
+       /* Hover efektlerinde primary renk kullanımı */
+       .card:hover {
+           border-color: var(--primary-color);
+       }
+
+       .service-card:hover .service-content h4 a {
+           color: var(--primary-color);
+       }
+
+       /* Primary renk için buton ve link stilleri */
+       .btn-primary {
+           background-color: var(--primary-color);
+           border-color: var(--primary-color);
+       }
+
+       .btn-primary:hover {
+           background-color: var(--secondary-color);
+           border-color: var(--secondary-color);
+       }
+
+       /* Text vurgu rengi */
+       ::selection {
+           background: var(--primary-color);
+           color: #fff;
+       }
+
+       /* Breadcrumb renk güncellemesi */
+       .breadcrumb-menu ul li a:hover {
+           color: var(--primary-color);
+       }
+       </style>
     </head>
    <body>
      <?php include 'ust.php'; ?>
@@ -72,191 +352,129 @@ $dil_karsiliklari = $db->query("SELECT k.haber_seo, k.dil_id, d.dil_kod, d.dil_b
       </section>
       <section class="about__area-2 pt-150 pb-90">
          <div class="container">
-            <div class="row align-items-center">
-               <div class="col-xl-6 col-lg-6">
-                  <div class="row">
-                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="about__sm-image about__sm-image-df">
-                           <div class="sm-image__item w-img mb-30">
-                              <a href="#"><img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/about/2/about-img-2.jpg" alt="ab-img"></a>
-                           </div>
-                           <div class="sm-image__item w-img mb-30">
-                              <a href="#"><img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/about/2/about-img-3.jpg" alt="ab-img"></a>
-                              <div class="sm-image__content">
-                                 <div class="sm-number">
-                                    <a href="#"><?php echo $tekil_veri_cek["haber_yillik"]; ?> <span>+</span></a>
-                                    <p><?php echo LANG('yillik_tecrube', $lang); ?></p>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="about__sm-image">
-                           <div class="sm-image__item w-img mb-30">
-                              <a href="#"><img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/about/2/about-img-4.jpg" alt="ab-img"></a>
-                           </div>
-                           <div class="sm-image__item w-img mb-30">
-                              <a href="#"><img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/about/2/about-img-5.jpg" alt="ab-img"></a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-xl-6 col-lg-6">
-                  <div class="ab-left-content">
-                     <div class="section__wrapper mb-30">
-                        <h4 class="section__title"><?php echo LANG('bizi_yakindan_taniyin', $lang); ?><br><?php echo LANG('bizi_yakindan_taniyin_2', $lang); ?></h4>
-                        <div class="r-text">
-                           <span><?php echo LANG('kurumsal_title', $lang); ?></span>
-                        </div>
-                     </div>
-                     <?php echo $tekil_veri_cek["haber_aciklama"]; ?>  
-                  </div>
-               </div>
-            </div>
-         </div>
-      </section>
-      <!-- about__area end -->
-
-      <!-- history__area start -->
-      <section class="history__area grey-bg-5 pt-120 pb-90 fix">
-         <div class="history__right-bg">
-            <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/testimonial/testimonial-bg-1.jpg" alt="Hizmetlerimiz">
-         </div>
-         <div class="container">
             <div class="row">
                <div class="col-xl-6 col-lg-6">
-                  <div class="section__wrapper mb-55">
-                     <h4 class="section__title"><?php echo LANG('hizmetlerimiz_title', $lang); ?></h4>
-                     <div class="r-text">
-                        <span><?php echo LANG('pumada_group', $lang); ?></span>
+                  <div class="about-image-grid">
+                     <?php if($tekil_veri_cek["haber_resim"]) { ?>
+                     <div class="main-image">
+                        <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/image.jpg" 
+                             alt="<?php echo $tekil_veri_cek["haber_baslik"]; ?>" class="img-fluid w-100 mb-4">
                      </div>
-                  </div>
-               </div>
-               <div class="col-xl-12">
-                  <div class="row">
-                        <?php
-                    				$veri_cek = $db->query("SELECT * FROM hizmetler 
-                        WHERE haber_durum = 1 
-                        AND dil_id = '$lang' 
-                        ORDER BY haber_ust_id ASC LIMIT 4");
-                     				if ($veri_cek->rowCount()){
-                    				foreach($veri_cek as $veri_listele){
-                    ?>  <div class="col-xl-3 col-lg-6 col-md-6">
-                        <div class="history__item mb-30">
-                           <div class="sm-item-thumb w-img">
-                              <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $veri_listele["haber_seo"]; ?>">
-                                 <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim"]; ?>" 
-                                      alt="<?php echo $veri_listele["haber_baslik"]; ?>">
-                              </a>
-                           </div>
-                           <div class="sm-item-content">
-                              <h6>
-                                 <a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $veri_listele["haber_seo"]; ?>">
-                                    <?php echo $veri_listele["haber_baslik"]; ?>
-                                 </a>
-                              </h6>
-                            </div>
+                     <?php } ?>
+                     
+                     <?php if($tekil_veri_cek["haber_yillik"]) { ?>
+                     <div class="experience-box">
+                        <div class="year-count">
+                           <span class="count"><?php echo $tekil_veri_cek["haber_yillik"]; ?>+</span>
+                           <p><?php echo LANG('yillik_tecrube', $lang); ?></p>
                         </div>
                      </div>
-                     <?php
-                               }
-                             }else{
-                               echo LANG('listelenecek_veri_bulunamadi', $lang);
-                             }
-                     ?>
+                     <?php } ?>
+                  </div>
+               </div>
+               <div class="col-xl-6 col-lg-6">
+                  <div class="about-content">
+                     <div class="section-title mb-4">
+                        <h2 class="title"><?php echo $tekil_veri_cek["haber_baslik"]; ?></h2>
+                        <div class="divider"></div>
+                     </div>
+                     
+                     <div class="about-text">
+                        <?php echo $tekil_veri_cek["haber_aciklama"]; ?>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
       </section>
 
-      <section class="company__about">
-         <div class="row g-0">
-            <div class="col-xl-12">
-               <div class="company__about-tab">
-                  <ul class="nav nav-tabs about-tabs" id="myTab" role="tablist">
-                     <li class="nav-item abst-item" role="presentation">
-                        <button class="nav-link active abst-item-link" id="misyon-tab" data-bs-toggle="tab" data-bs-target="#misyon" type="button" role="tab" aria-controls="misyon" aria-selected="true">Misyonumuz <i class="fa-light fa-arrow-down-long"></i></button>
-                     </li>
-                     <li class="nav-item abst-item" role="presentation">
-                        <button class="nav-link abst-item-link" id="vizyon-tab" data-bs-toggle="tab" data-bs-target="#vizyon" type="button" role="tab" aria-controls="vizyon" aria-selected="false">Vizyonumuz  <i class="fa-light fa-arrow-down-long"></i></button>
-                     </li>
-
-                    <?php if($tekil_veri_cek["haber_kalite"]) { ?>
-                        <li class="nav-item abst-item" role="presentation">
-                            <button class="nav-link abst-item-link" id="kalite-tab" data-bs-toggle="tab" data-bs-target="#kalite" type="button" role="tab" aria-controls="kalite" aria-selected="false">
-                                <?php echo LANG('kalite_politikamiz', $lang); ?> 
-                                <i class="fa-light fa-arrow-down-long"></i>
-                            </button>
-                        </li>
-                    <?php } ?>
-                  </ul>
-               </div>
-            </div>
-         </div>
-
+      <section class="mission-vision bg-light py-5">
          <div class="container">
             <div class="row">
-               <div class="tab-content company__about-tabs-content" id="myTabContent">
-                  <?php if($tekil_veri_cek["haber_description"]) { ?>
-                      <div class="tab-pane fade show active pt-90 pb-140" id="misyon" role="tabpanel" aria-labelledby="misyon-tab">
-                          <div class="row justify-content-center">
-                              <div class="col-xl-8">
-                                  <div class="company__sm-about text-center">
-                                      <div class="logo-wrapper mb-4">
-                                          <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/logo_pumada.png" 
-                                               alt="<?php echo $ayarlar["strTitle"]; ?>" 
-                                               style="max-width: 300px;">
-                                      </div>
-                                      <div class="content">
-                                          <?php echo $tekil_veri_cek["haber_description"]; ?>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  <?php } ?>
-
-                  <?php if($tekil_veri_cek["haber_kisaaciklama"]) { ?>
-                      <div class="tab-pane fade pt-90 pb-140" id="vizyon" role="tabpanel" aria-labelledby="vizyon-tab">
-                          <div class="row justify-content-center">
-                              <div class="col-xl-8">
-                                  <div class="company__sm-about text-center">
-                                      <div class="logo-wrapper mb-4">
-                                          <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/pumada_logo.png" 
-                                               alt="<?php echo $ayarlar["strTitle"]; ?>" 
-                                               style="max-width: 250px;">
-                                      </div>
-                                      <div class="content">
-                                          <?php echo $tekil_veri_cek["haber_kisaaciklama"]; ?>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  <?php } ?>
-
-                  <?php if($tekil_veri_cek["haber_kalite"]) { ?>
-                      <div class="tab-pane fade pt-90 pb-140" id="kalite" role="tabpanel" aria-labelledby="kalite-tab">
-                          <div class="row justify-content-center">
-                              <div class="col-xl-8">
-                                  <div class="company__sm-about text-center">
-                                      <div class="logo-wrapper mb-4">
-                                          <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/logo/yazi.png" 
-                                               alt="<?php echo $ayarlar["strTitle"]; ?>" 
-                                               style="max-width: 200px;">
-                                      </div>
-                                      <div class="content">
-                                          <?php echo $tekil_veri_cek["haber_kalite"]; ?>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  <?php } ?>
+               <?php if($tekil_veri_cek["haber_description"]) { ?>
+               <div class="col-lg-4 mb-4">
+                  <div class="card h-100">
+                     <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                           <i class="fas fa-bullseye fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title"><?php echo LANG('misyonumuz', $lang); ?></h4>
+                        <p class="card-text"><?php echo $tekil_veri_cek["haber_description"]; ?></p>
+                     </div>
+                  </div>
                </div>
+               <?php } ?>
+
+               <?php if($tekil_veri_cek["haber_kisaaciklama"]) { ?>
+               <div class="col-lg-4 mb-4">
+                  <div class="card h-100">
+                     <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                           <i class="fas fa-eye fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title"><?php echo LANG('vizyonumuz', $lang); ?></h4>
+                        <p class="card-text"><?php echo $tekil_veri_cek["haber_kisaaciklama"]; ?></p>
+                     </div>
+                  </div>
+               </div>
+               <?php } ?>
+
+               <?php if($tekil_veri_cek["haber_kalite"]) { ?>
+               <div class="col-lg-4 mb-4">
+                  <div class="card h-100">
+                     <div class="card-body text-center">
+                        <div class="icon-box mb-3">
+                           <i class="fas fa-award fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title"><?php echo LANG('kalite_politikamiz', $lang); ?></h4>
+                        <p class="card-text"><?php echo $tekil_veri_cek["haber_kalite"]; ?></p>
+                     </div>
+                  </div>
+               </div>
+               <?php } ?>
+            </div>
+         </div>
+      </section>
+
+      <section class="services-section py-5">
+         <div class="container">
+            <div class="section-title text-center mb-5">
+               <h2><?php echo LANG('hizmetlerimiz_title', $lang); ?></h2>
+               <div class="divider mx-auto"></div>
+            </div>
+
+            <div class="row">
+               <?php
+               $veri_cek = $db->query("SELECT * FROM hizmetler 
+                                      WHERE haber_durum = 1 
+                                      AND dil_id = '$lang' 
+                                      ORDER BY haber_ust_id ASC LIMIT 4");
+               if ($veri_cek->rowCount()){
+                  foreach($veri_cek as $veri_listele){
+               ?>
+               <div class="col-lg-3 col-md-6 mb-4">
+                  <div class="service-card">
+                     <div class="service-img">
+                        <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/services/<?php echo $veri_listele["haber_resim"]; ?>" 
+                             alt="<?php echo $veri_listele["haber_baslik"]; ?>" 
+                             class="img-fluid w-100">
+                     </div>
+                     <div class="service-content p-4">
+                        <h4><a href="<?php echo $ayarlar["strURL"]; ?>/hizmet/<?php echo $veri_listele["haber_seo"]; ?>">
+                           <?php echo $veri_listele["haber_baslik"]; ?>
+                        </a></h4>
+                        <?php if($veri_listele["haber_kisaaciklama"]) { ?>
+                        <p class="mb-0"><?php echo $veri_listele["haber_kisaaciklama"]; ?></p>
+                        <?php } ?>
+                     </div>
+                  </div>
+               </div>
+               <?php
+                  }
+               } else {
+                  echo '<div class="col-12 text-center">' . LANG('listelenecek_veri_bulunamadi', $lang) . '</div>';
+               }
+               ?>
             </div>
          </div>
       </section>

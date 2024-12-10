@@ -15,7 +15,7 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
 <html lang="<?php echo $lang; ?>">
 
 <head>
-    <title><?php echo LANG('menu_hizmetler', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
+    <title><?php echo LANG('services', $lang); ?> - <?php echo $ayarlar["strTitle"]; ?></title>
     <?php include 'css.php'; ?>
     <style>
         .services-grid {
@@ -125,11 +125,11 @@ $hizmetler = $hizmetler_query->fetchAll(PDO::FETCH_ASSOC);
                     <div class="page__title-wrapper mt-100">
                         <div class="breadcrumb-menu">
                             <ul>
-                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
-                                <li><span><?php echo LANG('menu_hizmetler', $lang); ?></span></li>
+                                <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('homepage', $lang); ?></a></li>
+                                <li><span><?php echo LANG('services', $lang); ?></span></li>
                             </ul>
                         </div>
-                        <h3 class="page__title mt-20"><?php echo LANG('menu_hizmetler', $lang); ?></h3>
+                        <h3 class="page__title mt-20"><?php echo LANG('services', $lang); ?></h3>
                     </div>
                 </div>
             </div>

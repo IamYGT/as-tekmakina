@@ -87,12 +87,12 @@
                   </div>
                </div>
             </div>
-            <div class="footer__shape-1">
+            <!-- <div class="footer__shape-1">
                <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/footer/footer-shape-1.png" alt="Astek Makina Shape">
-            </div>
-            <div class="footer__shape-2">
+            </div> -->
+            <!-- <div class="footer__shape-2">
                <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/footer/footer-shape-2.png" alt="Astek Makina Shape">
-            </div>
+            </div> -->
          </div>
       </footer>
       <script src="<?php echo $ayarlar["strURL"]; ?>/assets/js/vendor/jquery.js"></script>

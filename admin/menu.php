@@ -117,7 +117,7 @@
 						</a>
              </li>
              <li>
-    <a class="ai-icon" href="galeriler?do=files&id=2" aria-expanded="false">
+    <a class="ai-icon" href="referanslar" aria-expanded="false">
       <i class="far fa-newspaper"></i>
       <span class="nav-text">Referanslar</span>
     </a>
