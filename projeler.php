@@ -15,8 +15,8 @@
                   <div class="page__title-wrapper mt-100">
                      <div class="breadcrumb-menu">
                         <ul>
-                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
-                            <li><span><?php echo LANG('menu_projeler', $lang); ?></span></li>
+                            <li><a href="<?php echo $ayarlar["strURL"]; ?>/" class="breadcrumb-item"><?php echo LANG('menu_anasayfa', $lang); ?></a></li>
+                            <li><span class="breadcrumb-item active"><?php echo LANG('menu_projeler', $lang); ?></span></li>
                         </ul>
                     </div>
                      <h3 class="page__title mt-20"><?php echo LANG('menu_projeler', $lang); ?></h3>
@@ -40,38 +40,31 @@
                     <div class="portfolio-item mb-30">
                        <div class="portfolio-wrapper">
                           <div class="portfolio-image w-img">
-                            <?php if($veri_listele["proje_resim"]) { ?>
-                                <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
-                                    <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $veri_listele["proje_resim"]; ?>" 
-                                         alt="<?php echo $veri_listele["proje_baslik"]; ?>">
-                                </a>
-                            <?php } else { ?>
-                                <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
-                                    <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/no-image.jpg" 
-                                         alt="<?php echo $veri_listele["proje_baslik"]; ?>">
-                                </a>
-                            <?php } ?>
+                            <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
+                               <div class="project-image-container">
+                                   <?php if($veri_listele["proje_resim"]) { ?>
+                                       <img src="<?php echo $ayarlar["strURL"]; ?>/uploads/projects/<?php echo $veri_listele["proje_resim"]; ?>" 
+                                            alt="<?php echo $veri_listele["proje_baslik"]; ?>"
+                                            class="portfolio-img"
+                                            style="width: 100%; height: auto; object-fit: cover;">
+                                   <?php } else { ?>
+                                       <img src="<?php echo $ayarlar["strURL"]; ?>/assets/img/no-image.jpg" 
+                                            alt="<?php echo $veri_listele["proje_baslik"]; ?>"
+                                            class="portfolio-img"
+                                            style="width: 100%; height: auto; object-fit: cover;">
+                                   <?php } ?>
+                               </div>
+                            </a>
                           </div>
                           <div class="portfolio-caption">
-                             <p><?php echo LANG('proje_detay', $lang); ?></p>
-                             <h6>
+                             <h6 class="portfolio-title">
                                  <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
                                      <?php echo $veri_listele["proje_baslik"]; ?>
                                  </a>
                              </h6>
-                          </div>
-                          <div class="portfolio-caption-top">
-                             <p><?php echo LANG('proje_detay', $lang); ?></p>
-                             <h6>
-                                 <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
-                                     <?php echo $veri_listele["proje_baslik"]; ?>
-                                 </a>
-                             </h6>
-                          </div>
-                          <div class="portfolio-caption-bottom">
-                             <a href="<?php echo $ayarlar["strURL"]; ?>/proje/<?php echo $veri_listele["proje_seo"]; ?>">
-                                 <i class="fa-light fa-arrow-right-long"></i>
-                             </a>
+                             <p class="portfolio-description">
+                                 <?php echo LANG('proje_detay', $lang); ?>
+                             </p>
                           </div>
                        </div>
                     </div>

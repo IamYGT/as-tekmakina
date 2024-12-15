@@ -3,8 +3,8 @@ if(!isset($_SESSION['LOGIN'])) {
     go("index.php",0);  
     exit();
 }
-define('TABLE',"galeriler");
-define('AREA',"galeriler");
+define('TABLE', "galeriler");
+define('AREA', "galeriler");
 if(!isset($do)) $do = null; 
 $sayfa = (isset($q) ? $q : 1);
 $toplam_veri_sayisi = $db->query("SELECT COUNT(*) FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ")->fetchColumn();
@@ -85,7 +85,15 @@ $baslangic = ($sayfa-1)*$limit;
 									</thead>
 									<tbody id="sortable">
 <?php
-									$list = $db->query("SELECT * FROM ".TABLE." WHERE dil_id = '".LANGUAGE_DEFAULT."' ORDER BY row ASC LIMIT $baslangic,$limit"); 
+									$list = $db->query("SELECT p.*, 
+    GROUP_CONCAT(DISTINCT p2.dil_id) as diller,
+    GROUP_CONCAT(DISTINCT p2.galeri_baslik ORDER BY p2.dil_id SEPARATOR '|||') as basliklar
+    FROM ".TABLE." p 
+    LEFT JOIN ".TABLE." p2 ON p.galeri_ust_id = p2.galeri_ust_id 
+    WHERE p.dil_id = 'tr' 
+    GROUP BY p.galeri_ust_id 
+    ORDER BY p.row ASC, p.galeri_id DESC 
+    LIMIT $baslangic,$limit");
 										if ($list->rowCount()){
 											foreach($list as $row){ 
 ?>
@@ -233,7 +241,7 @@ $baslangic = ($sayfa-1)*$limit;
 													<span class="btn btn-primary btn-file">
 														<span class="fileinput-new">Resim Seç</span>
 														<span class="fileinput-exists">Değiştir</span>
-														<input type="file" name="galeri_resim">
+														<input type="file" name="galeri_resim" accept="image/*" id="galeri_resim">
 													</span>
 													<a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Sil</a>
 												</div>
@@ -340,7 +348,7 @@ $baslangic = ($sayfa-1)*$limit;
 														<div class="col-lg-12 mb-2">
 															<div class="form-group">
 																<label class="text-label"><i class="flag-icon flag-icon-<?php echo $LANGUAGE_CODE; ?> icon-2x"></i> Title</label>
-																<input type="text" name="galeri_baslik[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Title" required="" value="<?php echo GetTableValue("galeri_baslik",TABLE,"where galeri_ust_id = {$id} and dil_id = '{$LANGUAGE_CODE}' "); ?>">
+																<input type="text" name="galeri_baslik[<?php echo $LANGUAGE_CODE; ?>]" class="form-control" placeholder="Galeri İsmi" required="" value="<?php echo GetTableValue("galeri_baslik",TABLE,"where galeri_ust_id = {$id} and dil_id = '{$LANGUAGE_CODE}' "); ?>">
 															</div>
 														</div>
 														<div class="col-lg-12 mb-2">

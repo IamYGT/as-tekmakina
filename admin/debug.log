@@ -1,222 +1,79 @@
-[09-Dec-2024 23:19:18 Europe/Istanbul] Aktif dil sayısı: 3
-[09-Dec-2024 23:19:18 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[09-Dec-2024 23:19:18 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[09-Dec-2024 23:19:18 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[09-Dec-2024 23:19:18 Europe/Istanbul] Toplam TR proje sayısı: 0
-[09-Dec-2024 23:19:18 Europe/Istanbul] Toplam proje sayısı: 0
-[09-Dec-2024 23:19:18 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[09-Dec-2024 23:19:18 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[09-Dec-2024 23:19:18 Europe/Istanbul] Toplam proje sayısı: 0
-[09-Dec-2024 23:19:18 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
-[10-Dec-2024 04:42:48 Europe/Istanbul] Aktif dil sayısı: 3
-[10-Dec-2024 04:42:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 04:42:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 04:42:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 04:42:48 Europe/Istanbul] Toplam TR proje sayısı: 0
-[10-Dec-2024 04:42:48 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 04:42:48 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[10-Dec-2024 04:42:48 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[10-Dec-2024 04:42:48 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 04:42:48 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
-[10-Dec-2024 06:59:48 Europe/Istanbul] Aktif dil sayısı: 3
-[10-Dec-2024 06:59:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 06:59:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 06:59:48 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 06:59:48 Europe/Istanbul] Toplam TR proje sayısı: 0
-[10-Dec-2024 06:59:48 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 06:59:48 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[10-Dec-2024 06:59:48 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[10-Dec-2024 06:59:48 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 06:59:48 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
-[10-Dec-2024 11:15:34 Europe/Istanbul] Aktif dil sayısı: 3
-[10-Dec-2024 11:15:34 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:15:34 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:15:34 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:15:34 Europe/Istanbul] Toplam TR proje sayısı: 0
-[10-Dec-2024 11:15:34 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 11:15:34 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[10-Dec-2024 11:15:34 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[10-Dec-2024 11:15:34 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 11:15:34 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
-[10-Dec-2024 11:18:33 Europe/Istanbul] Aktif dil sayısı: 3
-[10-Dec-2024 11:18:33 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:18:33 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:18:33 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 11:18:33 Europe/Istanbul] Toplam TR proje sayısı: 0
-[10-Dec-2024 11:18:33 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 11:18:33 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[10-Dec-2024 11:18:33 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[10-Dec-2024 11:18:33 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 11:18:33 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
-[10-Dec-2024 16:11:27 Europe/Istanbul] Aktif dil sayısı: 3
-[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 1
-    [dil_baslik] => Türkçe
-    [dil_resim] => flag-tr.png
-    [dil_kod] => tr
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 2
-    [dil_baslik] => English
-    [dil_resim] => flag-gb.png
-    [dil_kod] => en
-    [dil_varsayilan] => 1
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 16:11:27 Europe/Istanbul] Dil: Array
-(
-    [dil_id] => 9
-    [dil_baslik] => Srpski
-    [dil_resim] => flag-rs.png
-    [dil_kod] => rs
-    [dil_varsayilan] => 2
-    [dil_durum] => 1
-)
-
-[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam TR proje sayısı: 0
-[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 16:11:27 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=projects&action=row
-[10-Dec-2024 16:11:27 Europe/Istanbul] LANGUAGE_DEFAULT: en
-[10-Dec-2024 16:11:27 Europe/Istanbul] Toplam proje sayısı: 0
-[10-Dec-2024 16:11:27 Europe/Istanbul] SQL Sorgusu: SELECT * FROM projeler WHERE dil_id = 'tr' ORDER BY proje_ust_id DESC LIMIT 0,10
+[12-Dec-2024 04:27:02 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:27:02 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:27:02 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:27:02 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:28:06 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:06 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:28:06 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:06 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:28:36 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:36 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:28:36 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:36 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:28:39 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:39 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:28:39 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:39 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:28:50 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:50 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:28:50 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:28:50 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:29:05 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:29:05 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:29:05 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:29:05 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:29:15 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:29:15 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:29:15 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:29:15 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:30:16 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:30:16 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:30:16 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:30:16 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:30:26 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:30:26 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:30:26 Europe/Istanbul] Toplam galeri resim sayısı: 7
+[12-Dec-2024 04:30:26 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:30:27 Europe/Istanbul] Toplam galeri resim sayısı: 6
+[12-Dec-2024 04:30:27 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:30:27 Europe/Istanbul] Toplam galeri resim sayısı: 6
+[12-Dec-2024 04:30:27 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:31:20 Europe/Istanbul] Toplam galeri resim sayısı: 6
+[12-Dec-2024 04:31:20 Europe/Istanbul] Ajax URL: https://pumada.ygtlabs.dev/include/ajax.php?do=gallery&action=row
+[12-Dec-2024 04:31:20 Europe/Istanbul] Toplam galeri resim sayısı: 6
+[12-Dec-2024 04:31:20 Europe/Istanbul] SQL Sorgusu: SELECT * FROM galeri_resimler ORDER BY galeri_tarih DESC LIMIT 0,10
+[12-Dec-2024 04:35:48 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:35:51 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:38:46 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:38:47 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:38:52 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:38:53 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
+[12-Dec-2024 04:38:53 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'row' in 'order clause' in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php:38
+Stack trace:
+#0 /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php(38): PDOStatement->execute()
+#1 {main}
+  thrown in /var/www/vhosts/ygtlabs.dev/pumada.ygtlabs.dev/admin/galeri.php on line 38
